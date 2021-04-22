@@ -5,10 +5,10 @@
                 "authProtocol": "default"
             },
             "previewLimit": 50,
-            "server": "172.17.0.2",
+            "server": "172.20.0.1",
             "port": 3306,
             "driver": "MySQL",
-            "name": "docker-database",
+            "name": "mysql-container",
             "database": "database_project",
             "username": "root",
             "password": "123456"
