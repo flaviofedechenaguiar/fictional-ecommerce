@@ -1,0 +1,121 @@
+<%- include('../partials/header.ejs'); %>
+<%- include(navbar); %>
+
+    <div style="height: 100vh">
+        <table class="table">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col"></th>
+                    <th scope="col">Nome do Produto</th>
+                    <th scope="col">Quantidade</th>
+                    <th scope="col">Valor</th>
+                    <th scope="col">Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% order.Order_Items.forEach((item, index)=> { %>
+                    <tr>
+                        <th scope="row">
+                            <div class="d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                                <img style="max-width: 100%; max-height: 50px;" src="<%= item.Product.imageLink%>" alt="">
+                            </div>
+                        </th>
+                        <td>
+                          <a class="estiloLink text-dark" href="/product/view/<%= item.Product.slug%>/<%= item.Product.id%>"> <%= item.Product.namePlusSmallDescription %></a>
+                        </td>
+                        <td><%= item.quantity%></td>
+                        <td>R$ <%= item.value.replace('.', ',') %></td>
+                        <td>R$ <%= ((Number(item.value) * Number(item.quantity)).toFixed(2)).replace('.', ',') %></td>
+                      </tr>
+                      <% if (index == order.Order_Items.length - 1) { %>
+                        <tr>
+                          <td class="bg-ligth border-bottom" colspan="5" style="background-color: #F2F2F2;">
+                            <h3><strong>Total da Compra: </strong><i class="text-dark" style="font-style: normal;">R$ <%= order.amount.replace('.', ',') %></i></h3>
+                          </td>
+                        </tr>
+                      <% } %>
+                    <% }) %>
+            </tbody>
+        </table>
+    </div>
+    <script>
+      let search = document.getElementById('search-bar');
+      let lastSearch = search.value;
+      let TIMEID = setInterval(() => {
+        if (search.value != '') {
+          if (lastSearch == search.value) {
+            let form = document.getElementById('search-form');
+            form.submit();
+          }
+        }
+        lastSearch = search.value;
+      }, 500);
+    </script>
+    <%- include('../partials/footer.ejs'); %>
+
+
+
+
+    <!-- // 20210310200805 -->
+<!-- // http://localhost:3030/user/myorders/view/1 -->
+<!--  -->
+<!-- { -->
+  <!-- "order": { -->
+    <!-- "id": 1, -->
+    <!-- "amount": "0.00", -->
+    <!-- "status": "2", -->
+    <!-- "createdAt": "2021-03-08T12:46:14.000Z", -->
+    <!-- "updatedAt": "2021-03-10T12:46:06.000Z", -->
+    <!-- "UserId": 21, -->
+    <!-- "Order_Items": [ -->
+      <!-- { -->
+        <!-- "id": 1, -->
+        <!-- "quantity": 1, -->
+        <!-- "value": "6.00", -->
+        <!-- "createdAt": "2021-03-08T12:46:14.000Z", -->
+        <!-- "updatedAt": "2021-03-08T12:46:14.000Z", -->
+        <!-- "ProductId": 6, -->
+        <!-- "OrderId": 1, -->
+        <!-- "Product": { -->
+          <!-- "id": 6, -->
+          <!-- "namePlusSmallDescription": "Celular XIOMI - 22gb - preto Brilhante - 4.1G", -->
+          <!-- "brand": "1234", -->
+          <!-- "refCode": "1234", -->
+          <!-- "description": "<p>asdf</p>", -->
+          <!-- "purchasePrice": "4.00", -->
+          <!-- "saleValue": "6.00", -->
+          <!-- "stockQuantity": 6, -->
+          <!-- "imageLink": "https://start.youse.com.br/wp-content/uploads/2020/01/VW-T-Cross-SUV-mais-vendido.jpg", -->
+          <!-- "createdAt": "2021-02-25T00:04:56.000Z", -->
+          <!-- "updatedAt": "2021-03-03T12:59:21.000Z", -->
+          <!-- "ProviderId": 1, -->
+          <!-- "CategoryId": 1 -->
+        <!-- } -->
+      <!-- }, -->
+      <!-- { -->
+        <!-- "id": 2, -->
+        <!-- "quantity": 2, -->
+        <!-- "value": "7.00", -->
+        <!-- "createdAt": "2021-03-08T12:46:14.000Z", -->
+        <!-- "updatedAt": "2021-03-08T12:46:14.000Z", -->
+        <!-- "ProductId": 13, -->
+        <!-- "OrderId": 1, -->
+        <!-- "Product": { -->
+          <!-- "id": 13, -->
+          <!-- "namePlusSmallDescription": "Celular XIOMI - 22gb - preto Brilhante - 4.1G", -->
+          <!-- "brand": "1234", -->
+          <!-- "refCode": "1234", -->
+          <!-- "description": "<p>fdafdsa</p>", -->
+          <!-- "purchasePrice": "4.00", -->
+          <!-- "saleValue": "7.00", -->
+          <!-- "stockQuantity": 8, -->
+          <!-- "imageLink": "https://s2.glbimg.com/3WBpcofhxcpzqBrPZoUUeEfXhc0=/0x0:695x401/600x0/smart/filters:gifv():strip_icc()/i.s3.glbimg.com/v1/AUTH_08fbf48bc0524877943fe86e43087e7a/internal_photos/bs/2017/9/4/j6fITqTW2nce3A8ZA3IQ/2-nokia-3310.jpg", -->
+          <!-- "createdAt": "2021-02-25T12:54:08.000Z", -->
+          <!-- "updatedAt": "2021-02-25T12:54:08.000Z", -->
+          <!-- "ProviderId": 1, -->
+          <!-- "CategoryId": 1 -->
+        <!-- } -->
+      <!-- } -->
+    <!-- ] -->
+  <!-- } -->
+<!-- } -->

@@ -1,0 +1,58 @@
+<%- include('../partials/header.ejs'); %>
+    <div>
+        <div class="card">
+            <div class="card-header">
+                <h3>
+                        Minhas Compras
+                        <i class="fas fa-box-open ml-1"></i>
+                </h3>
+            </div>
+            <div class="card-body">
+                <table class="table table-hover table-responsive-sm">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">Data</th>
+                            <th scope="col">Total</th>
+                            <th class="text-center" scope="col">Status</th>
+                            <th scope="col">Visualizar</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% orders.forEach(order=> { %>
+                            <tr>
+                                <th scope="row">
+                                    <%= order.convertDate %>
+                                </th>
+                                <td>R$ <%= order.amount %>
+                                </td>
+                                <td class="d-flex justify-content-center">
+                                    <% if (order.status==1) { %>
+                                        <a class="btn font-weight-bold px-1 py-1">
+                                            Pago
+                                            <i class="fas fa-hand-holding-usd ml-1"></i>
+                                        </a>
+                                        <% } else if (order.status==2) { %>
+                                            <a class="btn font-weight-bold  px-1 py-1 text-center">
+                                                Em Processamento
+                                                <i class="fas fa-undo-alt ml-1 "></i></i>
+                                            </a>
+                                            <% } else { %>
+                                                <a class="btn font-weight-bold  px-1 py-1 text-center">
+                                                    Enviado
+                                                    <i class="fas fa-truck ml-1"></i>
+                                                </a>
+                                                <% } %>
+                                </td>
+                                <td style="width: 13rem;">
+                                    <a class="btn btn-sm btn-secondary" href="/user/myorders/view/<%= order.id %>" >Vizualizar Compra</a>
+                                </td>
+                            </tr>
+                            <% }) %>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+    <%- include('../partials/footer.ejs'); %>

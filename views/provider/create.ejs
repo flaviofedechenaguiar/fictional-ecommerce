@@ -1,0 +1,184 @@
+<%- include('../partials/header.ejs'); %>
+<%- include('../partials/navbarAdmin.ejs');%>
+
+    <div class="container mt-1 mb-1" style="height: 98vh;">
+        <% if(error){ %>
+                
+            <%- '<div class="alert alert-danger alert-dismissible fade show" role="alert">' %> 
+            <%- '<strong> ' %>
+            <%= error %>
+            <%- '</strong>' %> 
+            <%- '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' %> 
+            <%- '<span aria-hidden="true">&times;</span>' %> 
+            <%- '</button>' %>
+            <%- '</div>' %>  
+        
+          
+        <% } %>
+        <div class="card">
+            <div class="card-header">
+                <h3>Novo Fornecedor</h3>
+            </div>
+            <div class="card-body">
+                <form id="formProvider" action="/admin/provider/create" method="POST">
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="fantasyName">Nome Fantasia</label>
+                            <input onchange="validate(this)" value="<%= dataReturn.fantasyName %>" type="text" class="form-control is-invalid"
+                                id="fantasyName" placeholder="Ex: Martin & Margin" name="fantasyName" required>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="socialReason">Razão Social</label>
+                            <input onchange="validate(this)" value="<%= dataReturn.socialReason %>" type="text" class="form-control is-invalid"
+                                id="socialReason" placeholder="Ex: Com. Augusto Rubs LTDA." name="socialReason"
+                                required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+
+                        <div class="form-group col-md-4">
+
+                            <label for="cnpj_cpf">CPF/CNPJ <strong>(Somente numeros)</strong></label>
+                            <input onchange="validate(this)" value="<%= dataReturn.cnpj_cpf %>" type="text" class="form-control is-invalid" id="cnpj_cpf"
+                                placeholder="Ex: 09090909090" name="cnpj_cpf" required>
+                        </div>
+
+
+                        <div class="form-group col-md-2 d-flex align-self-end flex-column">
+
+                            <div class="form-check">
+                                <input  class="form-check-input" type="radio" name="exampleRadios"
+                                    id="optionCnpj" value="0">
+                                <label class="form-check-label" for="optionCnpj">
+                                    CNPJ
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input onchange="" class="form-check-input" type="radio" name="exampleRadios"
+                                    id="optionCpf" value="1">
+                                <label class="form-check-label" for="optionCpf">
+                                    CPF
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-md-2">
+                            <label for="phoneNumber">Telefone</label>
+                            <input onchange="validate(this)" value="<%=  dataReturn.phoneNumber %>" type="text" class="form-control is-invalid"
+                                id="phoneNumber" placeholder="Ex: 44984524156" name="phoneNumber" required>
+                        </div>
+
+                        <div class="form-group col-md-4">
+                            <label for="email">Email</label>
+                            <input onchange="validate(this)" value="<%= dataReturn.email %>" type="email" class="form-control is-invalid" id="email" placeholder="Ex: exemploemail@email.com"
+                                name="email" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label for="zipCode">CEP <strong>(Somente numeros)</strong></label>
+                            <input onchange="validate(this);" value="<%= dataReturn.zipCode %>"  type="number" class="form-control is-invalid" id="zipCode"
+                                placeholder="Ex: 87150170" name="zipCode" minlength="8" maxlength="8" required>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="city">Cidade</label>
+                            <input onchange="validate(this)" value="<%= dataReturn.city %>" type="text" class="form-control is-invalid" id="city" placeholder="Ex: Umuarama" name="city" required>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="state">Estado</label>
+                            <select id="state" class="form-control" name="state">
+                                <% states.forEach(state => { %>
+                                   <% if(dataReturn.state == undefined){ %> 
+                                        <option value="<%= state.abbreviation%>"><%= state.name %></option>
+                                   <% }else{ %>
+                                        <% if(dataReturn.state == state.abbreviation){ %> 
+                                            <option selected value="<%= state.abbreviation%>"><%= state.name %></option>
+                                        <% }else{ %>
+                                            <option value="<%= state.abbreviation%>"><%= state.name %></option>
+                                        <% } %>          
+                                   <% } %> 
+
+                                    
+                                <% }) %>
+                            </select>
+                        </div>
+
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label for="address">Endereço</label>
+                            <input onchange="validate(this)" value="<%= dataReturn.address %>" type="text" class="form-control is-invalid" id="address" placeholder="Rua das Rosas"
+                                name="address" required>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label for="addressNumber">Numero</label>
+                            <input onchange="validate(this)" value="<%= dataReturn.addressNumber %>" type="text" class="form-control is-invalid" id="addressNumber" placeholder="Ex: 3401"
+                                name="addressNumber" required>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for=" neighborhood">Bairro</label>
+                            <input onchange="validate(this)" value="<%= dataReturn.neighborhood %>" type="text" class="form-control is-invalid" id="neighborhood"
+                                placeholder="Ex: Jardim das Orquideas" name="neighborhood" required>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label for="complement">Complemento</label>
+                            <input onchange="validate(this)" value="<%= dataReturn.complement %>" type="text" class="form-control is-invalid" id="complement" placeholder="Ex: Casa"
+                                name="complement" required>
+                        </div>
+                    </div>
+
+                    <hr>
+                    <div class="mt-1">
+                        <button type="submit" class="btn btn-success">Cadastrar</button>
+                        <!-- modal Button -->
+                        <button type="button" class="btn btn-danger " data-toggle="modal"
+                            data-target="#modalExemploCancel">
+                            Cancelar
+                        </button>
+                    </div>
+                </form>
+                <!-- modal -->
+                <div class="modal fade" id="modalExemploCancel" tabindex="-1" role="dialog"
+                    aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Alerta do Sistema
+                                </h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                Deseja Cancelar este Cadastro?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Não</button>
+                                <a class="btn btn-danger" href="/admin/provider">Sim</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+
+        let optionCnpj = document.getElementById('optionCnpj');
+        let optionCpf = document.getElementById('optionCpf');
+        let input = document.getElementById('cnpj_cpf');
+
+        optionCnpj.addEventListener('click', () => {
+            input.value = input.value.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, "$1.$2.$3/$4-$5");
+        });
+
+        optionCpf.addEventListener('click', () => {
+                input.value = input.value.match(/.{1,3}/g).join(".").replace(/\.(?=[^.]*$)/,"-");
+                // cpf.value = cpf.value.match(/.{1,3}/g).join(".").replace(/\.(?=[^.]*$)/,"-");
+        });
+
+                
+    </script>
+    <script src="/scripts/validate.js"></script>
+    <%- include('../partials/footer.ejs'); %>

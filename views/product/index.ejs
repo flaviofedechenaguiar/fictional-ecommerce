@@ -1,0 +1,169 @@
+<%- include('../partials/header.ejs'); %>
+<%- include('../partials/navbarAdmin.ejs'); %>
+    <div class="container mt-1 mb-1">
+        
+        <% if (message) { %>
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <%= message %> 
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+        <% } %>
+        <% if (error) { %>
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <%= error %> 
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+        <% } %>
+
+        <div class="card">
+            <div class="card-header d-flex justify-content-between">
+                <h3>Produto</h3>
+                <div class="col-5 d-flex p-1">
+                <form action="/admin/product" method="GET" class="d-flex w-100">
+                    <input class="form-control mr-1" type="text" name="search" placeholder="Nome do Produto ou Codigo de Referência">
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i></button>
+                </form>
+                </div>
+                <div class="p-1">
+                    <a class="btn btn-primary" href="/admin/product/create">Novo Produto</a>
+                </div>                
+            </div>
+            <div class="card-body">
+                <table class="table table-hover">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">Nome <strong>+ pequena Descricao</strong></th>
+                            <th scope="col">Und.</th>
+                            <th scope="col">Marca</th>
+                            <th scope="col">Valor Venda</th>
+                            <th>Imagem Principal</th>
+                            <th>Opções</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% products.forEach(product => { %>
+                            <% if (product.status == 0) { %>
+                                <tr class="table-secondary text-secondary">
+                            <% } else { %>
+                                <tr>
+                            <% } %>
+                            
+                                <th scope="row"><%= product.id%></th>
+                                <td><%= product.namePlusSmallDescription%></td>
+                                <td>
+                                    <% if (product.stockQuantity <= 5) { %>
+                                        <div class="btn btn-sm btn-danger">
+                                            <%= product.stockQuantity%>
+                                        </div>
+                                    <% } else { %>
+                                        <div class="btn btn-sm btn-primary">
+                                            <%= product.stockQuantity%>
+                                        </div>
+                                    <% } %>
+                                    
+                                </td>
+                                <td><%= product.brand%></td>
+                                <td>R$ <%=product.saleValue.replace('.', ',')%></td>
+                                <td style="width: 10%;" class="bg-secondary">
+                                    <img class="img-fluid" style="max-width: 100%; height: auto;" src="<%= product.imageLink %>">
+                                </td>
+                                <td style="width: 10%;">
+                                   <div class="d-flex justify-content-end">
+                                       <a class="btn btn-sm btn-warning mr-1" href="/admin/product/edit/<%= product.id%>">Editar</a>
+                                       
+                                       <% if (product.status == 1) { %>
+                                            <!-- Botão para acionar modal -->
+                                            <button type="button" class="btn btn-sm btn-dark mr-1" data-toggle="modal" data-target="#modalStatus<%= product.id%>">
+                                                Desativar
+                                            </button>
+                                       <% } else { %>
+                                            <!-- Botão para acionar modal -->
+                                            <button type="button" class="btn btn-sm btn-info mr-1" data-toggle="modal" data-target="#modalStatus<%= product.id%>">
+                                               Ativar
+                                            </button>
+                                       <% } %>
+                                        
+                                       
+                                        <!-- Botão para acionar modal -->
+                                        <button type="button" class="btn btn-sm btn-danger " data-toggle="modal" data-target="#modalDelete<%= product.id%>">
+                                            Deletar
+                                        </button>
+                                            
+                                   </div>
+                                </td>
+                                
+                            </tr>
+
+                            
+                                <!-- Modal -->
+                                <div class="modal fade" id="modalStatus<%= product.id%>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Alerta do Sistema</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                        </div>
+                                        <% if (product.status == 1) { %>
+                                            <div class="modal-body">
+                                                Deseja Desativar este Produto?
+                                            </div>
+                                        <% } else { %>
+                                            <div class="modal-body">
+                                                Deseja Ativar este Produto?
+                                            </div>
+                                        <% } %>
+                                        
+                                        <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Nao</button>
+                                        <form action="/admin/product/status" method="POST">
+                                            <input type="hidden" value="<%= product.id %>" name="id">
+                                            <button type="submit" class="btn btn-sm btn-danger">Sim</button>
+                                        </form>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+
+                                
+                                <!-- Modal -->
+                                <div class="modal fade" id="modalDelete<%= product.id%>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Alerta do Sistema</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            Deseja Excluir este Item?
+                                        </div>
+                                        <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Nao</button>
+                                        <form action="/admin/product/delete" method="POST">
+                                            <input type="hidden" value="<%= product.id %>" name="id">
+                                            <button type="submit" class="btn btn-sm btn-danger">Sim</button>
+                                        </form>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+
+
+                        <% }) %>
+                    </tbody>
+                </table>
+
+
+
+            </div>
+        </div>
+    </div>
+    <%- include('../partials/footer.ejs'); %>

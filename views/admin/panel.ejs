@@ -1,0 +1,38 @@
+<%- include('../partials/header.ejs') %>
+<%- include('../partials/navbarAdmin.ejs') %>
+<div style="height: 98vh;">
+
+    <% if(message){ %>
+        
+        <%- '<div class="alert alert-success alert-dismissible fade show" role="alert">' %> 
+        <%- '<strong> ' %>
+        <%= message %>
+        <%- '</strong>' %> 
+        <%- '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' %> 
+        <%- '<span aria-hidden="true">&times;</span>' %> 
+        <%- '</button>' %>
+        <%- '</div>' %>  
+    
+      
+    <% } %>
+    
+
+    <div class="container test d-flex flex-row">
+        <a href="/admin/info" class="icon-border col-md-3 p-3 d-flex"><i class="fas fa-address-card icon bg-primary text-light w-100 rounded"></i><h1 class="text-hover position-absolute">Admin</h1></a>
+        <a href="/admin/product" class="icon-border col-md-3 p-3 d-flex"><i class="fas fa-boxes icon bg-primary text-light w-100 rounded"></i><h1 class="text-hover position-absolute">Produtos</h1></a>
+        <a href="/admin/category" class="icon-border col-md-3 p-3 d-flex"><i class="fas fa-th icon bg-primary text-light w-100 rounded"></i><h1 class="text-hover position-absolute">Categorias</h1></a>
+        <a href="/admin/provider" class="icon-border col-md-3 p-3 d-flex"><i class="fas fa-truck-loading icon bg-primary text-light w-100 rounded py-2"></i><h1 class="text-hover position-absolute">Fornecedor</h1></a>
+    </div>
+    <div class="container test d-flex flex-row">
+        <a href="/admin/user" class="icon-border col-md-3 p-3 d-flex"><i class="fas fa-users icon bg-primary text-light w-100 rounded"></i><h1 class="text-hover position-absolute">Usuários</h1></a>
+        <a href="/admin/banner/update" class="icon-border col-md-3 p-3 d-flex"><i class="far fa-images icon bg-primary text-light w-100 rounded"></i><h1 class="text-hover position-absolute">Banner</h1></a>
+        <a href="/admin/order" class="icon-border col-md-3 p-3 d-flex"><i class="far fa-list-alt icon bg-primary text-light w-100 rounded"></i><h1 class="text-hover position-absolute">Pedidos</h1></a>
+        <div class="icon-border col-md-3 p-3 d-flex">
+            <form action="/admin/logout" method="POST" style="width: 100%;">
+                <button style="width: 100%; height: 100%;" class="btn btn-danger fab fa-mixer icon bg-danger text-light w-100 rounded "></button>
+            </form>
+            <h1 class="text-hover position-absolute text-light">Sair</h1>
+        </div>
+    </div>
+</div>
+<%- include('../partials/footer.ejs') %>

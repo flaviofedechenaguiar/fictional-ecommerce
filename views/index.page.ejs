@@ -1,0 +1,215 @@
+<%- include('partials/header.ejs');%>
+  <%- include(navbar);%>
+    <div id="carouselIndicators" class="carousel slide" data-ride="carousel">
+      <ol class="carousel-indicators">
+        <li data-target="#carouselIndicators" data-slide-to="0" class="active"></li>
+        <li data-target="#carouselIndicators" data-slide-to="1"></li>
+        <li data-target="#carouselIndicators" data-slide-to="2"></li>
+      </ol>
+      <div class="carousel-inner">
+        <div class="carousel-item active">
+          <img class="d-block w-100" src="<%= banner.linkOne %>" alt="Primeiro Slide">
+        </div>
+        <div class="carousel-item">
+          <img class="d-block w-100" src="<%= banner.linkTwo %>" alt="Segundo Slide">
+        </div>
+        <div class="carousel-item">
+          <img class="d-block w-100" src="<%= banner.linkThree %>" alt="Terceiro Slide">
+        </div>
+      </div>
+      <a class="carousel-control-prev" href="#carouselIndicators" role="button" data-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="sr-only">Anterior</span>
+      </a>
+      <a class="carousel-control-next" href="#carouselIndicators" role="button" data-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="sr-only">Próximo</span>
+      </a>
+    </div>
+    <div class="row w-100 m-0">
+      <div class="col-12 bg-dark d-flex">
+        <div class="table-responsive p-2">
+          <table class="table-to-dropdown">
+            <tbody>
+              <tr>
+                <% categories.forEach(category=> { %>
+                  <td><a href="/page/?category=<%= category.id%>" class="btn btn-sm btn-secondary">
+                      <%= category.name %>
+                    </a></td>
+                  <% }) %>
+
+                    <td>
+                      <div class="btn-group dropright">
+                        <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown"
+                          aria-haspopup="true" aria-expanded="false">
+                          Mais...
+                        </button>
+                        <div class="dropdown-menu">
+                          <button class="dropdown-item-">Categorias</button>
+                        </div>
+                      </div>
+                    </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="dropdown-to-table">
+            <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Dropdown button
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <a class="dropdown-item" href="#">Action</a>
+              <a class="dropdown-item" href="#">Another action</a>
+              <a class="dropdown-item" href="#">Something else here</a>
+            </div>
+            </div>
+          </div>
+        </div>
+        <div class="btn-group ml-auto p-2">
+          <button type="button" class="btn btn-sm btn-secondary dropdown-toggle" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">
+            Ordernar por preço
+          </button>
+          <div class="dropdown-menu dropdown-menu-right">
+            <a href="/" id="prod_asc" class="dropdown-item" type="button">Crescente</a>
+            <a href="/" id="prod_desc" class="dropdown-item" type="button">Decrescente</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="container">
+
+      <% let count=3; %>
+        <% let nextSequence=count + 1 %>
+          <% result.products.rows.forEach((product, index)=> { %>
+            <% if(index==0){ %>
+              <%- '<div class="card-group p-2">' %>
+              <!--Inicio-->
+            <% } %>
+            <% if(index > count){ %>
+              <%- '</div>' %>
+              <!--Fim dos cards-->
+              <%- '<div class="card-group p-2">' %>
+              <!--Inicio do Segundo grupo Card-->
+              <% count +=nextSequence; %>
+            <% } %>
+
+            <!--Apresentacao dos Cards-->
+            <%- `
+            <a class="product-hover p-2" href='/product/view/${product.slug}/${product.id}'>
+              <div style="min-height: 100%" class="card">
+                <div style="width: 100%; height: 147.328px;">
+                  <img class="card-img-top mx-auto d-block" style="max-width:100%;
+                  max-height:147.328px;
+                  width: auto;
+                  height: auto;" src="${product.imageLink}">
+                </div>
+                <div class="p-2">
+                  <h5 class="card-title">${product.namePlusSmallDescription}</h5>
+                  <p class="card-text" >R$ ${product.saleValue}</p>
+                </div>
+              </div>
+            </a>`%>
+
+            <% if(index==result.products.rows.length - 1){ %>
+              <%- '</div>' %>
+              <!--Fim do Ultimo Aviso-->
+            <% } %>
+
+
+
+          <% }) %>
+
+            
+        <div class="w-100 d-flex justify-content-center">
+          <nav aria-label="Navegação de página exemplo">
+            <ul class="pagination">
+              <% if (result.page > 2) { %>
+                <li class="page-item"><a class="page-link" id="last-page" href="/page?page=<%= result.page - 1 %>">Anterior</a></li>
+              <% } else if(result.page == 2) { %>
+                <li class="page-item"><a class="page-link" id="last-page" href="/page">Anterior</a></li>
+              <% } else { %>
+                <li class="page-item disabled"><a class="page-link" id="last-page" href="">Anterior</a></li>
+              <% } %>
+              
+              <li class="page-item"><a class="page-link" href=""><%= result.page %></a></li>
+              
+              <% if (result.next) { %>
+                <li class="page-item"><a class="page-link" id="next-page" href="/page?page=<%= result.page + 1 %>">Próximo</a></li>
+              <% } else { %>
+                <li class="page-item disabled"><a class="page-link" id="next-page" href="/page?page=<%= result.page + 1 %>">Próximo</a></li>
+              <% } %>
+            </ul>
+          </nav>    
+        </div>
+          
+          <!-- container end -->
+    </div>
+
+    <script>
+
+      let search = document.getElementById('search-bar');
+      let lastSearch = search.value;
+      let TIMEID = setInterval(() => {
+        if (search.value != '') {
+          if (lastSearch == search.value) {
+            let form = document.getElementById('search-form');
+            form.submit();
+          }
+        }
+        lastSearch = search.value;
+      }, 500);
+
+
+
+  
+
+      // URL CODE
+      let url = window.location.search.substr(1).split('&');
+      if (url[0].includes('category') || url[0].includes('search')) {  
+        document.getElementById('prod_asc').href = `/page?${url[0]}&order=asc`
+        document.getElementById('prod_desc').href = `/page?${url[0]}&order=desc`;
+      } else {
+        document.getElementById('prod_asc').href = `/page?order=asc`
+        document.getElementById('prod_desc').href = `/page?order=desc`;
+      }
+
+
+      
+      // Parte Sistema Paginacao
+
+      let nextPage = document.getElementById('next-page');
+      let lastPage = document.getElementById('last-page');
+  
+      let data = '';
+      console.log(url.length);
+      url.forEach((query, index) => {
+        if(!query.includes('page')){
+            if(query != ''){
+              if(index == 0){
+                data += `?${query}`
+              }else{
+                data += `&${query}`
+              }
+            }else{
+              data = '?page';
+            }
+        }
+      });
+
+      if(!(data.includes('page') || data == '')){
+        nextPage.href = `/page${data}&${nextPage.href.substr(nextPage.href.indexOf('?')).substr(1)}`;
+        if(lastPage.href.includes('page=')){
+          lastPage.href = `/page${data}&${lastPage.href.substr(lastPage.href.indexOf('?')).substr(1)}`;
+        }else{
+          lastPage.href = `/page${data}`;
+        }
+      }
+      
+    </script>
+
+
+
+    <%- include('partials/footer.ejs');%>

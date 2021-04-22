@@ -1,0 +1,70 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <a class="navbar-brand" href="#">
+        <%= name.toUpperCase(); %>
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#textoNavbar"
+        aria-controls="textoNavbar" aria-expanded="false" aria-label="Alterna navegação">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="textoNavbar">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active ml-1">
+                <a class="nav-link btn btn-sm btn-light text-dark" href="/admin/panel">
+                    <i class="fas fa-home ml-1"></i>
+                    Home<span class="sr-only">(Página atual)</span></a>
+            </li>
+            <li class="nav-item active ml-1">
+                <a class="nav-link btn btn-sm btn-light text-dark" href="/admin/product">
+                    <i class="fas fa-boxes ml-1"></i>
+                    Produtos<span class="sr-only">(Página atual)</span></a>
+            </li>
+            <li class="nav-item active ml-1">
+                <a class="nav-link btn btn-sm btn-light text-dark" href="/admin/category">
+                    <i class="fas fa-th ml-1"></i>
+                    Categorias<span class="sr-only">(Página atual)</span></a>
+            </li>
+            <li class="nav-item active ml-1">
+                <a class="nav-link btn btn-sm btn-light text-dark" href="/admin/provider">
+                    <i class="fas fa-truck-loading ml-1"></i>
+                    Fornecedores<span class="sr-only">(Página atual)</span></a>
+            </li>
+            <li class="nav-item active ml-1">
+                <a class="nav-link btn btn-sm btn-light text-dark" href="/admin/user">
+                    <i class="fas fa-users ml-1"></i>
+                    Usuários<span class="sr-only">(Página atual)</span></a>
+            </li>
+            <li class="nav-item active ml-1">
+                <a class="nav-link btn btn-sm btn-light text-dark" href="/admin/order">
+                    <i class="far fa-list-alt ml-1"></i>
+                    Pedidos<span class="sr-only">(Página atual)</span></a>
+            </li>
+
+            <li class="nav-item dropdown mx-1">
+                <a class="nav-link dropdown-toggle btn btn-sm btn-dark" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fas fa-arrow-circle-down ml-1"></i>
+                    Outros
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <a class="dropdown-item" href="/admin/banner/update">
+                    <i class="far fa-images ml-1"></i>  
+                    Banners</a>
+                  <a class="dropdown-item" href="/admin/info">
+                    <i class="far fa-address-card ml-1"></i>  
+                    Admins</a>
+                  
+                </div>
+            </li>
+
+        </ul>
+
+
+
+        <form action="/admin/logout" method="POST">
+            <button class="btn btn-danger btn-sm my-2 my-sm-0" type="submit">
+                <i class="fas fa-sign-out-alt ml-1"></i>
+                Logout
+            </button>
+        </form>
+
+    </div>
+</nav>

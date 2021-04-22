@@ -1,0 +1,118 @@
+<%- include('../../partials/header.ejs');%>
+<%- include('../../partials/navbarAdmin.ejs');%>
+
+
+
+
+    <div class="container mt-1 mb-1" style="min-height: 98vh;">
+
+        <% if(message){ %>
+        
+            <%- '<div class="alert alert-success alert-dismissible fade show" role="alert">' %> 
+            <%- '<strong> ' %>
+            <%= message %>
+            <%- '</strong>' %> 
+            <%- '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' %> 
+            <%- '<span aria-hidden="true">&times;</span>' %> 
+            <%- '</button>' %>
+            <%- '</div>' %>  
+        
+          
+        <% } %>
+        
+        <% if(error){ %>
+                
+            <%- '<div class="alert alert-danger alert-dismissible fade show" role="alert">' %> 
+            <%- '<strong> ' %>
+            <%= error %>
+            <%- '</strong>' %> 
+            <%- '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' %> 
+            <%- '<span aria-hidden="true">&times;</span>' %> 
+            <%- '</button>' %>
+            <%- '</div>' %>  
+        
+          
+        <% } %>
+
+        <div class="card">
+            <div class="card-header d-flex justify-content-between">
+                <h3>Usuários</h3>
+
+                <div class="col-5 d-flex p-1">
+                    <form action="/admin/user" method="GET" class="d-flex w-100">
+                        <input class="form-control mr-1" type="text" name="search" placeholder="E-mail do usuário">
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i></button>
+                    </form>
+                </div>
+
+                <div></div>
+            </div>
+            <div class="card-body">
+                <table class="table table-bordered table-hover">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">Nome</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Opções</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        <% data.forEach(user => { %>
+                            <tr>
+                                <th scope="row">
+                                    <%= user.id %>
+                                </th>
+                                <td>
+                                    <%= user.completeName %>
+                                </td>
+                                <td>
+                                    <%= user.email %>
+                                </td>
+                                <td class="d-flex justify-content-center">
+                                    <% if (user.status == 0) { %>
+                                        <button type="button" class="btn btn-info btn-sm mr-2" data-toggle="modal"
+                                            data-target="#modalExemplo">
+                                            Ativar
+                                        </button>
+                                        <div class="modal fade" id="modalExemplo" tabindex="-1" role="dialog" 
+                                        aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel">Alerta do Sistema
+                                                    </h5>
+                                                    <button type="button" class="close" data-dismiss="modal"
+                                                        aria-label="Fechar">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    Deseja ativar esta conta?
+                                                    <p style="font-size: 10px;">> O usuário poderá fazer login novamente</p>
+                                                    <p style="font-size: 10px;">> Movimentar esta conta normalmente</p>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <form action="/admin/user/status" method="POST">
+                                                        <input type="hidden" value="<%= user.id %>" name="id">
+                                                        <button type="button" class="btn btn-secondary"
+                                                            data-dismiss="modal">Não</button>
+                                                        <button type="submit" class="btn btn-danger">Sim</button>
+                                                    </form>
+                           
+                                                </div>
+                                             </div>
+                                         </div>
+                                     </div>
+                                    <% } %>
+                                    <a href="/admin/user/edit/<%= user.id %>" class="btn btn-warning btn-sm mr-1">Editar</a>
+                                </td>
+                            </tr>
+                            <% }) %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <%- include('../../partials/footer.ejs');%>

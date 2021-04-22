@@ -1,0 +1,434 @@
+<%- include('../partials/header.ejs'); %>
+<%- include('../partials/navbarAdmin.ejs'); %> 
+    <div class="container">
+
+        <% if(error){ %>
+        
+            <%- '<div class="alert alert-danger alert-dismissible fade show mt-1" role="alert">' %> 
+            <%- '<strong> ' %>
+            <%= error %>
+            <%- '</strong>' %> 
+            <%- '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' %> 
+            <%- '<span aria-hidden="true">&times;</span>' %> 
+            <%- '</button>' %>
+            <%- '</div>' %>  
+        
+          
+        <% } %>
+
+        <div class="card mt-1 mb-1">
+            <div class="card-header">
+                <h3>Editar Produto</h3>
+            </div>
+            <div class="card-body">
+                <form action="/admin/product/edit" method="POST">
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label for="namePlusSmallDescription">Nome <strong>+ Pequena Descricao (40 Caracteres)</strong> </label>
+                            <input value="<%= product.namePlusSmallDescription%>" type="text"
+                                id="namePlusSmallDescription" class="form-control is-invalid"
+                                name="namePlusSmallDescription" maxlength="40" oninput="validate(this)" required>
+                            <!-- value="<%=  %>" -->
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-3">
+                            <label for="brand">Marca</label>
+                            <input value="<%= product.brand %>" type="text" id="brand" class="form-control is-invalid"
+                                name="brand" oninput="validate(this)" required>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="refCode">Codigo de Referencia</label>
+                            <input value="<%= product.refCode %>" type="text" id="refCode"
+                                class="form-control is-invalid" name="refCode" oninput="validate(this)" required>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label for="purchasePrice">Preco de Compra</label>
+                            <input value="<%= product.purchasePrice %>" type="number" id="purchasePrice"
+                                class="form-control is-invalid" min="0" name="purchasePrice" oninput="validate(this)" required step="any">
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label for="saleValue">Preco de Venda</label>
+                            <input value="<%= product.saleValue %>" type="number" id="saleValue"
+                                class="form-control is-invalid" min="0" name="saleValue" oninput="validate(this)" required step="any">
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label for="stockQuantity">Unidade em Estoque</label>
+                            <input value="<%= product.stockQuantity %>" type="number" id="stockQuantity"
+                                class="form-control is-invalid" min="0" name="stockQuantity" oninput="validate(this)" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="category">Categoria</label>
+                            <select class="form-control" name="category" id="category" required>
+                                <% categories.forEach(category=> { %>
+                                    <% if (product.CategoryId==category.id) { %>
+                                        <option selected value="<%= category.id %>">
+                                            <%= category.name %>
+                                        </option>
+                                        <% } else { %>
+                                            <option value="<%= category.id %>">
+                                                <%= category.name %>
+                                            </option>
+                                            <% } %>
+                                                <% }) %>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="provider">Fornecedor</label>
+                            <select class="form-control" name="provider" id="provider" required>
+                                <% providers.forEach(provider=> { %>
+                                    <% if (product.ProviderId==provider.id) { %>
+                                        <option selected value="<%= provider.id %>">
+                                            <%= provider.fantasyName %> - <%= provider.socialReason %>
+                                        </option>
+                                        <% } else { %>
+                                            <option value="<%= provider.id %>">
+                                                <%= provider.fantasyName %> - <%= provider.socialReason %>
+                                            </option>
+                                            <% } %>
+                                                <% }) %>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-11">
+                            <label for="imageLink">Imagem Principal</label>
+                            <input value="<%= product.imageLink %>" type="text" id="imageLink"
+                                class="form-control is-invalid" name="imageLinkPrincipal"
+                                placeholder="Ex: http://image/product/product.img.png"
+                                onchange="renderImage(this, 'imageLinkIMG')" oninput="validate(this)" required>
+                        </div>
+                        <img src="<%= product.imageLink %>"
+                            class="form-group col-md-1 img-fluid img-thumbnail border-secondary" height="auto"
+                            id="imageLinkIMG">
+                    </div>
+                    <!-- codigo para cadastrar imagens secundarias -->
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+
+
+                            <div class="accordion w-100" id="accordionImages">
+                                <div class="card">
+                                    <div class="card-header" id="headingOne">
+                                        <h5 class="mb-0">
+                                            <button class="btn btn-link" type="button" data-toggle="collapse"
+                                                data-target="#collapseOne" aria-expanded="true"
+                                                aria-controls="collapseOne">
+                                                Inserir Imagem 1
+                                            </button>
+                                        </h5>
+                                    </div>
+
+                                    <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
+                                        data-parent="#accordionImages">
+
+                                        <% if (product.Product_Images[0]) { %>
+                                            <div class="card-body">
+                                                <input name="ids" type="hidden"
+                                                    value="<%= product.Product_Images[0].id %>">
+                                                <div class="form-row">
+                                                    <div class="form-group col-md-2">
+                                                        <label for="imageTitle1">Titulo da Imagem</label>
+                                                        <input value="<%= product.Product_Images[0].name %>" type="text"
+                                                            class="form-control" id="imageTitle1" name="imageTitle"
+                                                            placeholder="Ex: Foto de Cima">
+                                                    </div>
+                                                    <div class="form-group col-md-10">
+                                                        <label for="imageLink1">Link da Imagem</label>
+                                                        <input value="<%= product.Product_Images[0].imageLink %>"
+                                                            type="text" class="form-control" name="imageLink"
+                                                            placeholder="Ex: http://image/product/product.img.png"
+                                                            id="imageLink1"
+                                                            onchange="renderImage(this, 'imageRender1');">
+                                                    </div>
+                                                </div>
+                                                <hr>
+                                                <div class="form-row">
+                                                    <div class="form-group col-md-12 d-flex justify-content-center">
+                                                        <img src="<%= product.Product_Images[0].imageLink %>"
+                                                            class="img-fluid rounded border border-secondary"
+                                                            style="max-width: 50%;" height="auto" id="imageRender1">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <% } else { %>
+                                                <div class="card-body">
+                                                    <div class="form-row">
+                                                        <div class="form-group col-md-2">
+                                                            <label for="imageTitle1">Titulo da Imagem</label>
+                                                            <input type="text" class="form-control" id="imageTitle1"
+                                                                name="imageTitle" placeholder="Ex: Foto de Cima">
+                                                        </div>
+                                                        <div class="form-group col-md-10">
+                                                            <label for="imageLink1">Link da Imagem</label>
+                                                            <input type="text" class="form-control" name="imageLink"
+                                                                placeholder="Ex: http://image/product/product.img.png"
+                                                                id="imageLink1"
+                                                                onchange="renderImage(this, 'imageRender1');">
+                                                        </div>
+                                                    </div>
+                                                    <hr>
+                                                    <div class="form-row">
+                                                        <div class="form-group col-md-12 d-flex justify-content-center">
+                                                            <img class="img-fluid rounded border border-secondary"
+                                                                style="max-width: 50%;" height="auto" id="imageRender1">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <% } %>
+
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-header" id="headingTwo">
+                                        <h5 class="mb-0">
+                                            <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
+                                                data-target="#collapseTwo" aria-expanded="false"
+                                                aria-controls="collapseTwo">
+                                                Inserir Imagem 2
+                                            </button>
+                                        </h5>
+                                    </div>
+                                    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo"
+                                        data-parent="#accordionImages">
+
+                                        <% if (product.Product_Images[1]) { %>
+                                            <div class="card-body">
+                                                <input name="ids" type="hidden"
+                                                    value="<%= product.Product_Images[1].id %>">
+                                                <div class="form-row">
+                                                    <div class="form-group col-md-2">
+                                                        <label for="imageTitle2">Titulo da Imagem</label>
+                                                        <input value="<%= product.Product_Images[1].name %>" type="text"
+                                                            class="form-control" name="imageTitle" id="imageTitle2"
+                                                            placeholder="Ex: Foto de Cima">
+                                                    </div>
+                                                    <div class="form-group col-md-10">
+                                                        <label for="imageLink2">Link da Imagem</label>
+                                                        <input value="<%= product.Product_Images[1].imageLink %>"
+                                                            type="text" class="form-control" name="imageLink"
+                                                            id="imageLink2"
+                                                            placeholder="Ex: http://image/product/product.img.png"
+                                                            onchange="renderImage(this, 'imageRender2');">
+
+                                                    </div>
+                                                </div>
+                                                <hr>
+                                                <div class="form-row">
+                                                    <div class="form-group col-md-12 d-flex justify-content-center">
+                                                        <img src="<%= product.Product_Images[1].imageLink %>"
+                                                            class="img-fluid rounded border border-secondary"
+                                                            style="max-width: 50%;" height="auto" id="imageRender2">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <% } else { %>
+                                                <div class="card-body">
+                                                    <div class="form-row">
+                                                        <div class="form-group col-md-2">
+                                                            <label for="imageTitle2">Titulo da Imagem</label>
+                                                            <input type="text" class="form-control" name="imageTitle"
+                                                                id="imageTitle2" placeholder="Ex: Foto de Cima">
+                                                        </div>
+                                                        <div class="form-group col-md-10">
+                                                            <label for="imageLink2">Link da Imagem</label>
+                                                            <input type="text" class="form-control" name="imageLink"
+                                                                id="imageLink2"
+                                                                placeholder="Ex: http://image/product/product.img.png"
+                                                                onchange="renderImage(this, 'imageRender2');">
+
+                                                        </div>
+                                                    </div>
+                                                    <hr>
+                                                    <div class="form-row">
+                                                        <div class="form-group col-md-12 d-flex justify-content-center">
+                                                            <img class="img-fluid rounded border border-secondary"
+                                                                style="max-width: 50%;" height="auto" id="imageRender2">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <% } %>
+
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-header" id="headingThree">
+                                        <h5 class="mb-0">
+                                            <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
+                                                data-target="#collapseThree" aria-expanded="false"
+                                                aria-controls="collapseThree">
+                                                Inserir Imagem 3
+                                            </button>
+                                        </h5>
+                                    </div>
+                                    <div id="collapseThree" class="collapse" aria-labelledby="headingThree"
+                                        data-parent="#accordionImages">
+                                        <% if (product.Product_Images[2]) { %>
+                                            <div class="card-body">
+                                                <input name="ids" type="hidden"
+                                                    value="<%= product.Product_Images[2].id %>">
+                                                <div class="form-row">
+                                                    <div class="form-group col-md-2">
+                                                        <label for="imageTitle2">Titulo da Imagem</label>
+                                                        <input value="<%= product.Product_Images[2].name %>" type="text"
+                                                            class="form-control" name="imageTitle" id="imageTitle2"
+                                                            placeholder="Ex: Foto de Cima">
+                                                    </div>
+                                                    <div class="form-group col-md-10">
+                                                        <label for="imageLink2">Link da Imagem</label>
+                                                        <input value="<%= product.Product_Images[2].imageLink %>"
+                                                            type="text" class="form-control" name="imageLink"
+                                                            id="imageLink2"
+                                                            placeholder="Ex: http://image/product/product.img.png"
+                                                            onchange="renderImage(this, 'imageRender3');">
+                                                    </div>
+                                                </div>
+                                                <hr>
+                                                <div class="form-row">
+                                                    <div class="form-group col-md-12 d-flex justify-content-center">
+                                                        <img src="<%= product.Product_Images[2].imageLink %>"
+                                                            class="img-fluid rounded border border-secondary"
+                                                            style="max-width: 50%;" height="auto" id="imageRender3">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <% } else { %>
+                                                <div class="card-body">
+                                                    <div class="form-row">
+                                                        <div class="form-group col-md-2">
+                                                            <label for="imageTitle2">Titulo da Imagem</label>
+                                                            <input type="text" class="form-control" name="imageTitle"
+                                                                id="imageTitle2" placeholder="Ex: Foto de Cima">
+                                                        </div>
+                                                        <div class="form-group col-md-10">
+                                                            <label for="imageLink2">Link da Imagem</label>
+                                                            <input type="text" class="form-control" name="imageLink"
+                                                                id="imageLink2"
+                                                                placeholder="Ex: http://image/product/product.img.png"
+                                                                onchange="renderImage(this, 'imageRender3');">
+                                                        </div>
+                                                    </div>
+                                                    <hr>
+                                                    <div class="form-row">
+                                                        <div class="form-group col-md-12 d-flex justify-content-center">
+                                                            <img class="img-fluid rounded border border-secondary"
+                                                                style="max-width: 50%;" height="auto" id="imageRender3">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <% } %>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-header" id="headingFour">
+                                        <h5 class="mb-0">
+                                            <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
+                                                data-target="#collapseFour" aria-expanded="false"
+                                                aria-controls="collapseFour">
+                                                Inserir Imagem 4
+                                            </button>
+                                        </h5>
+                                    </div>
+                                    <div id="collapseFour" class="collapse" aria-labelledby="headingFour"
+                                        data-parent="#accordionImages">
+
+                                        <% if (product.Product_Images[3]) { %>
+                                            <div class="card-body">
+                                                <input name="ids" type="hidden"
+                                                    value="<%= product.Product_Images[3].id %>">
+                                                <div class="form-row">
+                                                    <div class="form-group col-md-2">
+                                                        <label for="imageTitle2">Titulo da Imagem</label>
+                                                        <input value="<%= product.Product_Images[3].name %>" type="text"
+                                                            class="form-control" name="imageTitle" title="imageTitle2"
+                                                            placeholder="Ex: Foto de Cima">
+                                                    </div>
+                                                    <div class="form-group col-md-10">
+                                                        <label for="imageLink2">Link da Imagem</label>
+                                                        <input value="<%= product.Product_Images[3].imageLink %>"
+                                                            type="text" class="form-control" name="imageLink"
+                                                            id="imageLink2"
+                                                            placeholder="Ex: http://image/product/product.img.png"
+                                                            onchange="renderImage(this, 'imageRender4');">
+                                                    </div>
+                                                </div>
+                                                <hr>
+                                                <div class="form-row">
+                                                    <div class="form-group col-md-12 d-flex justify-content-center">
+                                                        <img src="<%= product.Product_Images[3].imageLink %>"
+                                                            class="img-fluid rounded border border-secondary"
+                                                            style="max-width: 50%;" height="auto" id="imageRender4">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <% } else { %>
+                                                <div class="card-body">
+                                                    <div class="form-row">
+                                                        <div class="form-group col-md-2">
+                                                            <label for="imageTitle2">Titulo da Imagem</label>
+                                                            <input type="text" class="form-control" name="imageTitle"
+                                                                title="imageTitle2" placeholder="Ex: Foto de Cima">
+                                                        </div>
+                                                        <div class="form-group col-md-10">
+                                                            <label for="imageLink2">Link da Imagem</label>
+                                                            <input type="text" class="form-control" name="imageLink"
+                                                                id="imageLink2"
+                                                                placeholder="Ex: http://image/product/product.img.png"
+                                                                onchange="renderImage(this, 'imageRender4');">
+                                                        </div>
+                                                    </div>
+                                                    <hr>
+                                                    <div class="form-row">
+                                                        <div class="form-group col-md-12 d-flex justify-content-center">
+                                                            <img class="img-fluid rounded border border-secondary"
+                                                                style="max-width: 50%;" height="auto" id="imageRender4">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <% } %>
+
+
+
+
+
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- codigo para cadastrar imagens secundarias -->
+
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label for="description">
+                                <h4>Descrição</h4>
+                            </label>
+                            <textarea id="description" name="description" class="tinymce"></textarea>
+                        </div>
+                    </div>
+                    <input name="id" type="hidden" value="<%= product.id %>">
+                    <button class="btn btn-warning">Editar</button>
+                    <a class="btn btn-danger" href="/admin/panel">Cancelar</a>
+                </form>
+
+            </div>
+        </div>
+    </div>
+    <div style="display: none;" class="container" id="div-text">
+        <%- product.description %>
+    </div>
+
+    <script>
+        function renderImage(tag, idImage) {
+            document.getElementById(idImage).src = tag.value;
+        }
+    </script>
+    <script src="/scripts/validate.js"></script>
+    <script src="/tinymce/tinymce.min.js"></script>
+    <script src="/scripts/tiny.render.js"></script>
+
+
+    <%- include('../partials/footer.ejs'); %>

@@ -1,0 +1,37 @@
+<%- include('../partials/header.ejs');%>
+
+  <div class="adminlogin">
+
+    <div class="container-fluid text-center">
+
+      <% if(message){ %>
+        
+          <%- '<div class="alert alert-danger alert-dismissible fade show" role="alert">' %> 
+          <%- '<strong> ' %>
+          <%= message %>
+          <%- '</strong>' %> 
+          <%- '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' %> 
+          <%- '<span aria-hidden="true">&times;</span>' %> 
+          <%- '</button>' %>
+          <%- '</div>' %>  
+
+        
+      <% } %>
+
+                <form action="/admin/authenticate" method="POST" class="form-signin">
+                  <i class='fas fa-user-secret' style='font-size:72px; color: rgba(0, 89, 255, 0.829)'></i>
+                  <h1 class="h3 mb-3 font-weight-normal">Faça login</h1>
+                  <label for="inputEmail" class="sr-only">Endereço de email</label>
+                  <input type="email" id="inputEmail" class="form-control" placeholder="Seu email" required autofocus
+                    name="email">
+                  <label for="inputPassword" class="sr-only">Senha</label>
+                  <input type="password" id="inputPassword" class="form-control" placeholder="Senha" required
+                    name="password">
+                  <button class="btn btn-lg btn-primary btn-block" type="submit">Login</button>
+                  <p class="mt-5 mb-3 text-muted">&copy; 2021</p>
+                </form>
+
+    </div>
+
+  </div>
+  <%- include('../partials/footer.ejs');%>

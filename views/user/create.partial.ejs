@@ -1,0 +1,93 @@
+<form action="/user/create" method="POST" class="container p-2">
+    <i class='fas fas fa-user-alt d-flex justify-content-center p-2'
+        style='font-size:72px; color: rgba(0, 89, 255, 0.829)'></i>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label for="inputFullName">Nome Completo</label>
+            <input oninput="validate(this)" type="text" class="form-control is-invalid" id="inputFullName" placeholder="Ex: João Santos" required
+                name="completeName">
+        </div>
+        <div class="form-group col-md-3">
+            <label for="inputDateBirth">Data de Nascimento</label>
+            <input oninput="validate(this)" type="date" class="form-control is-invalid" name="birth" id="inputDateBirth" required/>
+        </div> 
+        <!-- <div class="form-group col-md-2">
+            <label for="inputDateBirth">Data de Nascimento</label>
+            <input oninput="validate(this)" type="text" class="form-control is-invalid" name="birth" id="inputDateBirth" minlength="10" maxlength="10" onkeypress="mascaraData(this)"/>
+        </div> -->
+        <div class="form-group col-md-3">
+            <label for="inputIdentification">CPF <strong>(Somente números)</strong></label>
+            <input oninput="mascara(this);"  oninput="validate(this)" type="text" class="form-control is-invalid" id="inputIdentification" placeholder="" required name="cpf">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-3">
+            <label for="inputPhone">Telefone</label>
+            <input oninput="validate(this)" type="text" class="form-control is-invalid" id="inputPhone" placeholder="44999897421" required
+                name="phoneNumber">
+        </div>
+        <div class="form-group col-md-6">
+            <label for="inputEmail">Email</label>
+            <input oninput="validate(this)" type="email" class="form-control is-invalid" id="inputEmail" placeholder="Email" required name="email">
+        </div>
+        <div class="form-group col-md-3">
+            <label for="inputPassword">Senha</label>
+            <input oninput="validate(this)" type="password" class="form-control is-invalid" id="inputPassword" placeholder="Senha" required name="password">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-3">
+            <label for="inputCEP">CEP <strong>(Somente números)</strong></label>
+            <input oninput="validate(this)" type="text" class="form-control is-invalid" id="inputCEP" minlength="8" maxlength="8" required name="zipCode">
+        </div>
+        <div class="form-group col-md-5">
+            <label for="inputAddress">Endereço</label>
+            <input oninput="validate(this)" type="text" class="form-control is-invalid" id="inputAddress" placeholder="Rua dos Bobos" required
+                name="address">
+        </div>
+        <div class="form-group col-md-4">
+            <label for="inputNeighborhood">Bairro</label>
+            <input oninput="validate(this)" type="text" class="form-control is-invalid" id="inputNeighborhood" placeholder="Ex: Jardim Petrópolis" required
+                name="neighborhood">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="inputCity">Cidade</label>
+            <input oninput="validate(this)" type="text" class="form-control is-invalid" id="inputCity" required name="city">
+        </div>
+        <div class="form-group col-md-4">
+            <label for="inputState">Estado</label>
+            <select id="inputState" class="form-control" name="state">
+                <% states.forEach(state => { %>
+                    <option value="<%= state.abbreviation %>"><%= state.name %></option>
+                <% }) %>
+            </select>
+        </div>
+        <div class="form-group col-md-2">
+            <label for="inputComplement">Complemento</label>
+            <input oninput="validate(this)" type="text" class="form-control is-invalid" id="inputComplement" placeholder="Ex: casa, apartamento..." required
+                name="complement">
+        </div>
+        <div class="form-group col-md-2">
+            <label for="inputNumber">Número</label>
+            <input oninput="validate(this)" type="text" class="form-control is-invalid" id="inputNumber" placeholder="Ex: 2211, A21..." required
+                name="addressNumber">
+        </div>
+    </div>
+    <button type="submit" class="btn btn-success">Registrar</button>
+</form>
+<script>
+    let todayDate = new Date();
+    let day = (todayDate.getDate()).toString();
+    let month = (todayDate.getMonth() + 1).toString();
+    if(day.length == 1){
+        day = `0${day}`;
+    }
+    if(month.length == 1){
+        month = `0${month}`;
+    }
+    let year = todayDate.getFullYear();
+    document.getElementById('inputDateBirth').max = `${year}-${month}-${day}`;
+</script>
+<script src="/scripts/cpfmask.js"></script>

@@ -1,0 +1,304 @@
+<%- include('../partials/header.ejs'); %>
+<%- include('../partials/navbarAdmin.ejs'); %>
+
+    <div class="container mt-1 mb-1" style="min-height: 98vh;">
+        <div class="card">
+            <div class="card-header">
+                <h3>Ordem de Compra <strong>N: <%= order.id%></strong></h3>
+            </div>
+            <div class="card-body">
+                <div class=" row border rounded mb-2">
+                    <div class="col col-12">
+                        <p>ID da Ordem:
+                            <%= order.id %>
+                        </p>
+                        <p>Total Pago: R$
+                            <%= order.amount.replace('.', ',') %>
+                        </p>
+                        <p style="margin-bottom: 0px;">Status da Ordem: 
+                            <% if (order.status == 1) { %>
+                                <p class="font-weight-bold bg-success px-1 py-1">Pago</p>
+                            <% } else if (order.status == 2) { %>
+                                <p class="font-weight-bold bg-warning px-1 py-1">Separando Mercadoria para Envio</p>
+                            <% } else { %>
+                                <p class="font-weight-bold bg-primary px-1 py-1">Enviado</p>
+                            <% } %>
+
+                        </p>
+                        <p>Data de Emissão:
+                            <%= order.createdAtAlternated %>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="row border rounded mb-2 px-1 py-1 bg-secondary">
+                    <div class="col col-12">
+                        <h4>Produtos da Ordem</h4>
+                        <hr>
+                        <% order.Order_Items.forEach(item=> { %>
+                            <div class="border rounded px-1 py-1 mb-1 bg-light">
+                                <p>
+                                    Codigo Ref:
+                                    <strong>
+                                        <%= item.Product.refCode %>
+                                    </strong>
+                                </p>
+                                <p>
+                                    Nome do Produto:
+                                    <%= item.Product.namePlusSmallDescription %>
+                                </p>
+                                <p>
+                                    Marca:
+                                    <%= item.Product.brand %>
+                                </p>
+                                <p>
+                                    Valor atual de Venda: R$
+                                    <%= item.Product.saleValue.replace('.', ',') %>
+                                </p>
+                                <hr>
+                                <h5>
+                                    Quantidade de Compra:
+                                    <%= item.quantity %>
+                                </h5>
+                                <h5>
+                                    Valor de Venda: R$
+                                    <%= item.value.replace('.', ',') %>
+                                </h5>
+                                <h4>
+                                    Valor Total dos Itens: R$
+                                    <%= ((Number(item.value) * Number(item.quantity)).toFixed(2)).replace('.', ',') %>
+                                </h4>
+
+
+                            </div>
+                            <% }) %>
+
+
+
+
+                                <!-- "Order_Items": [
+      {
+        "id": 1,
+        "quantity": 1,
+        "value": "6.00",
+        "createdAt": "2021-03-08T12:46:14.000Z",
+        "updatedAt": "2021-03-08T12:46:14.000Z",
+        "ProductId": 6,
+        "OrderId": 1,
+        "Product": {
+          "id": 6,
+          "namePlusSmallDescription": "Celular XIOMI - 22gb - preto Brilhante - 4.1G",
+          "brand": "1234",
+          "refCode": "1234",
+          "description": "<p>asdf</p>",
+          "purchasePrice": "4.00",
+          "saleValue": "6.00",
+          "stockQuantity": 6,
+          "imageLink": "https://start.youse.com.br/wp-content/uploads/2020/01/VW-T-Cross-SUV-mais-vendido.jpg",
+          "createdAt": "2021-02-25T00:04:56.000Z",
+          "updatedAt": "2021-03-03T12:59:21.000Z",
+          "ProviderId": 1,
+          "CategoryId": 1
+        } -->
+
+
+                    </div>
+                </div>
+
+                <div class="row border rounded px-1 py-1">
+                    <div class="col col-6">
+                        <h4>Dados do Usuário</h4>
+                        <hr>
+                        <p>Nome:
+                            <strong>
+                                <%= order.User.completeName %>
+                            </strong>
+                        </p>
+                        <p>CPF:
+                            <%= order.User.cpf %>
+                        </p>
+                        <p>Email:
+                            <%= order.User.email %>
+                        </p>
+                        <p>Telefone:
+                            <%= order.User.phoneNumber %>
+                        </p>
+                    </div>
+                    <div class="col col-6 ">
+                        <h5>Endereço: </h5>
+                        <div>
+                            <p>Rua: <%= order.User.address %>
+                            </p>
+                            <p>Numero: <%= order.User.addressNumber %>
+                            </p>
+                            <p>Bairro: <%= order.User.neighborhood %>
+                            </p>
+                            <p>Cidade: <%= order.User.city %>
+                            </p>
+
+                            <% states.forEach(state=> { %>
+                                <% if (state.abbreviation==order.User.state) { %>
+                                    <p>
+                                        Estado: <%= state.name %> - <%= order.User.state %>
+                                    </p>
+                                    <% } %>
+                                        <% }) %>
+
+                                            <p>
+                                                Complemento: <%= order.User.complement %>
+                                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row border rounded px-1 py-1 mt-1">
+                    <div class="col col-6">
+                        <% if (order.status == 1) { %>
+                            <a href="/admin/order/edit-status/<%= order.id %>/1" class="disabled btn btn-success">Pago</a>
+                            <a href="/admin/order/edit-status/<%= order.id %>/2" class="btn btn-warning">Separando Mercadoria para Envio</a>
+                            <a href="/admin/order/edit-status/<%= order.id %>/3" class="btn btn-primary">Enviado</a>
+                            <% } else if (order.status == 2) { %>
+                                <a href="/admin/order/edit-status/<%= order.id %>/1" class="btn btn-success">Pago</a>
+                                <a href="/admin/order/edit-status/<%= order.id %>/2" class="disabled btn btn-warning">Separando Mercadoria para Envio</a>
+                                <a href="/admin/order/edit-status/<%= order.id %>/3" class="btn btn-primary">Enviado</a>
+                        <% } else { %>
+                            <a href="/admin/order/edit-status/<%= order.id %>/1" class="btn btn-success">Pago</a>
+                            <a href="/admin/order/edit-status/<%= order.id %>/2" class="btn btn-warning">Separando Mercadoria para Envio</a>
+                            <a href="/admin/order/edit-status/<%= order.id %>/3" class="disabled btn btn-primary">Enviado</a>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <%- include('../partials/footer.ejs'); %>
+
+
+
+    <!-- {
+    "id": 1,
+    "amount": "0.00",
+    "status": "3",
+    "createdAt": "2021-03-08T12:46:14.000Z",
+    "updatedAt": "2021-03-08T12:46:14.000Z",
+    "UserId": 21,
+    "Order_Items": [
+      {
+        "id": 1,
+        "quantity": 1,
+        "value": "6.00",
+        "createdAt": "2021-03-08T12:46:14.000Z",
+        "updatedAt": "2021-03-08T12:46:14.000Z",
+        "ProductId": 6,
+        "OrderId": 1
+      },
+      {
+        "id": 2,
+        "quantity": 2,
+        "value": "7.00",
+        "createdAt": "2021-03-08T12:46:14.000Z",
+        "updatedAt": "2021-03-08T12:46:14.000Z",
+        "ProductId": 13,
+        "OrderId": 1
+      }
+    ],
+    "User": {
+      "id": 21,
+      "completeName": "Flavio Aguiar Fedechen Ghilherme",
+      "birth": "2001-10-30T03:00:00.000Z",
+      "cpf": "118342123454",
+      "email": "admin@admin.com",
+      "password": "$2b$10$OOzjut5gn/7O3kWuqiFL/ujpqGoL/7lwwFFPpm7l85GJOcSESqDm6",
+      "phoneNumber": "234432432432",
+      "city": "DEVconf",
+      "state": "RS",
+      "address": "Dev Road",
+      "addressNumber": "4422",
+      "neighborhood": "JavaScript",
+      "complement": "Casa",
+      "zipCode": "87509190",
+      "createdAt": "2021-02-18T23:04:07.000Z",
+      "updatedAt": "2021-02-22T14:13:42.000Z"
+    }
+  } -->
+
+
+    <!-- {
+    "id": 1,
+    "amount": "0.00",
+    "status": "3",
+    "createdAt": "2021-03-08T12:46:14.000Z",
+    "updatedAt": "2021-03-08T12:46:14.000Z",
+    "UserId": 21,
+    "Order_Items": [
+      {
+        "id": 1,
+        "quantity": 1,
+        "value": "6.00",
+        "createdAt": "2021-03-08T12:46:14.000Z",
+        "updatedAt": "2021-03-08T12:46:14.000Z",
+        "ProductId": 6,
+        "OrderId": 1,
+        "Product": {
+          "id": 6,
+          "namePlusSmallDescription": "Celular XIOMI - 22gb - preto Brilhante - 4.1G",
+          "brand": "1234",
+          "refCode": "1234",
+          "description": "<p>asdf</p>",
+          "purchasePrice": "4.00",
+          "saleValue": "6.00",
+          "stockQuantity": 6,
+          "imageLink": "https://start.youse.com.br/wp-content/uploads/2020/01/VW-T-Cross-SUV-mais-vendido.jpg",
+          "createdAt": "2021-02-25T00:04:56.000Z",
+          "updatedAt": "2021-03-03T12:59:21.000Z",
+          "ProviderId": 1,
+          "CategoryId": 1
+        }
+      },
+      {
+        "id": 2,
+        "quantity": 2,
+        "value": "7.00",
+        "createdAt": "2021-03-08T12:46:14.000Z",
+        "updatedAt": "2021-03-08T12:46:14.000Z",
+        "ProductId": 13,
+        "OrderId": 1,
+        "Product": {
+          "id": 13,
+          "namePlusSmallDescription": "Celular XIOMI - 22gb - preto Brilhante - 4.1G",
+          "brand": "1234",
+          "refCode": "1234",
+          "description": "<p>fdafdsa</p>",
+          "purchasePrice": "4.00",
+          "saleValue": "7.00",
+          "stockQuantity": 8,
+          "imageLink": "https://s2.glbimg.com/3WBpcofhxcpzqBrPZoUUeEfXhc0=/0x0:695x401/600x0/smart/filters:gifv():strip_icc()/i.s3.glbimg.com/v1/AUTH_08fbf48bc0524877943fe86e43087e7a/internal_photos/bs/2017/9/4/j6fITqTW2nce3A8ZA3IQ/2-nokia-3310.jpg",
+          "createdAt": "2021-02-25T12:54:08.000Z",
+          "updatedAt": "2021-02-25T12:54:08.000Z",
+          "ProviderId": 1,
+          "CategoryId": 1
+        }
+      }
+    ],
+    "User": {
+      "id": 21,
+      "completeName": "Flavio Aguiar Fedechen Ghilherme",
+      "birth": "2001-10-30T03:00:00.000Z",
+      "cpf": "118342123454",
+      "email": "admin@admin.com",
+      "password": "$2b$10$OOzjut5gn/7O3kWuqiFL/ujpqGoL/7lwwFFPpm7l85GJOcSESqDm6",
+      "phoneNumber": "234432432432",
+      "city": "DEVconf",
+      "state": "RS",
+      "address": "Dev Road",
+      "addressNumber": "4422",
+      "neighborhood": "JavaScript",
+      "complement": "Casa",
+      "zipCode": "87509190",
+      "createdAt": "2021-02-18T23:04:07.000Z",
+      "updatedAt": "2021-02-22T14:13:42.000Z"
+    }
+  } -->
+
+
+    

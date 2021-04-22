@@ -1,0 +1,89 @@
+<%- include('../partials/header.ejs');%>
+<%- include('../partials/navbarAdmin.ejs') %>
+
+  <div class="jumbotron jumbotron-fluid" style="min-height: 100vh;">
+    <div class="container">
+      <h1 class="display-4">Carregar banner</h1>
+      <hr class="my-4">
+      <form action="/admin/banner/update" method="POST">
+        <div class="accordion" id="accordionExample">
+          <div class="card">
+            <div class="card-header" id="headingOne">
+              <h5 class="mb-0">
+                <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne"
+                  aria-expanded="true" aria-controls="collapseOne">
+                  1º Banner
+                </button>
+              </h5>
+            </div>
+
+            <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+              <div class="card-body">
+                <input onchange="changeImage(this, 'linkOne')" type="text" value="<%= banner.linkOne %>"
+                  class="form-control" name="linkOne" placeholder="Dimensões 1310x350">
+                <hr>
+                <div class="d-flex justify-content-center">
+                  <img src="<%= banner.linkOne %>" class="img-fluid rounded border border-secondary"
+                    style="max-width: 50%;" height="auto" id="linkOne">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header" id="headingTwo">
+              <h5 class="mb-0">
+                <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo"
+                  aria-expanded="false" aria-controls="collapseTwo">
+                  2º Banner
+                </button>
+              </h5>
+            </div>
+            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+              <div class="card-body">
+                <input onchange="changeImage(this, 'linkTwo')" type="text" value="<%= banner.linkTwo %>"
+                  class="form-control" name="linkTwo" placeholder="Dimensões 1310x350">
+                <hr>
+                <div class="d-flex justify-content-center">
+                  <img src="<%= banner.linkTwo %>" class="img-fluid rounded border border-secondary"
+                    style="max-width: 50%;" height="auto" id="linkTwo">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header" id="headingThree">
+              <h5 class="mb-0">
+                <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseThree"
+                  aria-expanded="false" aria-controls="collapseThree">
+                  3º Banner
+                </button>
+              </h5>
+            </div>
+            <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
+              <div class="card-body">
+                <input onchange="changeImage(this, 'linkThree')" type="text" value="<%= banner.linkThree %>"
+                  class="form-control" name="linkThree" placeholder="Dimensões 1310x350">
+                <hr>
+                <div class="d-flex justify-content-center">
+                  <img src="<%= banner.linkThree %>" class="img-fluid rounded border border-secondary"
+                    style="max-width: 50%;" height="auto" id="linkThree">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <input type="hidden" name="id" value="<%= banner.id %>">
+        <button type="submit" class="btn btn-success mt-1">Carregar</button>
+        <a href="/admin/panel" class="btn btn-danger mt-1">Cancelar</a>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    function changeImage(input, idImg) {
+      let tagImage = document.getElementById(idImg);
+      tagImage.src = input.value;
+    }
+  </script>
+
+  <%- include('../partials/footer.ejs');%>

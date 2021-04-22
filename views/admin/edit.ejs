@@ -1,0 +1,74 @@
+<%- include('../partials/header.ejs'); %>
+<%- include('../partials/navbarAdmin.ejs'); %>
+    <div class="container mt-1 mb-1" style="height: 98vh;">
+        <% if(error){ %>
+                
+            <%- '<div class="alert alert-danger alert-dismissible fade show" role="alert">' %> 
+            <%- '<strong> ' %>
+            <%= error %>
+            <%- '</strong>' %> 
+            <%- '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' %> 
+            <%- '<span aria-hidden="true">&times;</span>' %> 
+            <%- '</button>' %>
+            <%- '</div>' %>  
+        
+          
+        <% } %>
+        <div class="card">
+            <div class="card-header">
+                <h3>Editar Administrador</h3>
+            </div>
+            <div class="card-body">
+                <form action="/admin/edit" method="POST">
+                    <label for="name">Nome</label>
+                    <input onclick="validate(this)" oninput="validate(this)" value="<%= data.name %>" type="text"
+                        class="form-control is-invalid" id="name" name="name" placeholder="ex: Augusto Silva Arlindo"
+                        required>
+                    <hr>
+                    <label for="email">Email</label>
+                    <input onclick="validate(this)" oninput="validate(this);lowerCaseFunc(this);" value="<%= data.email %> " type="email"
+                        class="form-control is-invalid" id="email" name="email" placeholder="email@email.com" required>
+                    <hr>
+                    <label for="password">Senha</label>
+                    <input type="password" class="form-control" id=" password" name="password" placeholder="********">
+                    <hr>
+                    <input type="hidden" value="<%= data.id %>" name="id">
+                    <div class="mt-1">
+                        <button type="submit" class="btn btn-success">Alterar</button>
+                        <!-- modal Button -->
+                        <button type="button" class="btn btn-danger " data-toggle="modal"
+                            data-target="#modalExemploCancel">
+                            Cancelar
+                        </button>
+
+                    </div>
+                </form>
+                <!-- modal -->
+                <div class="modal fade" id="modalExemploCancel" tabindex="-1" role="dialog"
+                    aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Alerta do Sistema
+                                </h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                Deseja Cancelar a alteração?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Não</button>
+                                <a class="btn btn-danger" href="/admin/info">Sim</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="/scripts/lowerCase.js"></script>
+    <script src="/scripts/validate.js"></script>
+   
+    <%- include('../partials/footer.ejs'); %>

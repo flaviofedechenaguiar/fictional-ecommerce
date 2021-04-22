@@ -1,0 +1,48 @@
+<%- include('../partials/header.ejs');%>
+
+    <div class="container">
+        <div class="row mt-2">
+            <div class="col-md-1 miniatura" style="padding: 0%;">
+                <img src="<%= product.imageLink %>" alt="" class="w-100" style="border: 1px solid grey;" onmousemove="renderImageSmall(this);">
+                <% product.Product_Images.forEach(image => { %>
+                    <img src="<%= image.imageLink %>" alt="" class="w-100" style="border: 1px solid grey;" onmousemove="renderImageSmall(this);">     
+                <% }) %>
+            </div>
+            <div class="col-md-6">
+                <img src="<%= product.imageLink %>" id="bigImage" alt="" class="img-fluid rounded">
+            </div>
+            <div class="col-md-5" style="border: 1px solid grey; border-radius: 2%;">
+                <div class="mx-3 little-description">
+                    <div>
+                        <h2><%= product.namePlusSmallDescription %></h2>
+                        <h6><%= product.brand %></h6>
+                    </div>
+                    <h4>R$ <%= product.saleValue %></h4>
+                    <h6>cod. ref <strong><%= product.refCode%></strong></h6>
+                    <h6 style="color: green;">Quantidade em estoque: <strong><%= product.stockQuantity %></strong></h6>
+            
+                    <form action="/add-to-cart" method="POST">
+                        <input type="hidden" value="<%= product.id%>" name="id">
+                        <input class="form-control" type="number" value="1" min="1" max="<%= product.stockQuantity %>" name="quantity" required>
+                        <button type="submit" class="btn btn-success">Adicionar ao Carrinho</button>
+                    </form>
+                   
+                    
+                </div>
+                   
+                
+                
+            </div>
+        </div>
+        <div class="row">
+            <%- product.description %>
+        </div>
+    </div>
+    <script>
+        function renderImageSmall(tag){
+           let linkImage = tag.src;
+           document.getElementById('bigImage').src = linkImage;
+        }
+    </script>
+
+<%- include('../partials/footer.ejs');%>

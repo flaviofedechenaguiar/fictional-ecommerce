@@ -1,0 +1,353 @@
+<%- include('../partials/header.ejs'); %>
+<%- include(navbar); %>
+
+
+
+  <div class="col-12" style="min-height: 100vh;">
+    <div class="row p-4">
+      <div class="col-3">
+        <h3>Perfil do Usuário</h3>
+      </div>
+    </div>
+
+    <% if(error){ %>
+            
+      <%- '<div class="alert alert-danger alert-dismissible fade show" role="alert">' %> 
+      <%- '<strong> ' %>
+      <%= error %>
+      <%- '</strong>' %> 
+      <%- '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' %> 
+      <%- '<span aria-hidden="true">&times;</span>' %> 
+      <%- '</button>' %>
+      <%- '</div>' %>  
+  
+    
+  <% } %>
+
+    <div class="row p-4">
+      <div class="col-12 col-md-3">
+        <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+          <a class="nav-link active" id="v-pills-profile-tab" data-toggle="pill" href="#v-pills-profile" role="tab"
+            aria-controls="v-pills-profile" aria-selected="true"><i class="fas fa-user-cog mr-2"></i>Perfil</a>
+          <a class="nav-link" id="v-pills-address-tab" data-toggle="pill" href="#v-pills-address" role="tab"
+            aria-controls="v-pills-address" aria-selected="false"><i class="fas fa-map-marker-alt mr-2"></i>Endereço</a>
+          <a class="nav-link" id="v-pills-mycart-tab" data-toggle="pill" href="#v-pills-mycart" role="tab"
+            aria-controls="v-pills-mycart" aria-selected="false"><i class="fas fa-cart-arrow-down mr-2"></i>Minhas
+            compras</a>
+          <div class="row p-3 mt-4">
+            <div class="col-12"><a href="/user/logout" class="text-danger"><i class="fas fa-sign-out-alt mr-2"
+                  style="transform: rotate(180deg);"></i><span>Log out</span></a></div>
+          </div>
+        <!-- <div class="col-12"><a href="/user/logout" class="btn btn-danger mt-auto"><i class=""
+            style="transform: rotate(180deg);"></i><span>Desativar</span></a></div>
+        </div> -->
+             <!-- modal Button-->
+          <button type="button" class="btn btn-danger mt-auto" data-toggle="modal"
+             data-target="#modalExemplo">
+             Desativar
+         </button>
+
+
+         <!-- modal -->
+         <div class="modal fade" id="modalExemplo" tabindex="-1" role="dialog" 
+             aria-labelledby="exampleModalLabel" aria-hidden="true">
+             <div class="modal-dialog" role="document">
+                 <div class="modal-content">
+                     <div class="modal-header">
+                         <h5 class="modal-title" id="exampleModalLabel">Alerta do Sistema
+                         </h5>
+                         <button type="button" class="close" data-dismiss="modal"
+                             aria-label="Fechar">
+                             <span aria-hidden="true">&times;</span>
+                         </button>
+                     </div>
+                     <div class="modal-body">
+                         Deseja desativar sua conta?
+                         <p style="font-size: 10px;">> Caso queira restaurar a mesma entre em contato com os nossos e-mails de suporte.</p>
+                         <p style="font-size: 10px;">> Fique ciente de que todos os dados serão guardados de forma restrita e segura.</p>
+                     </div>
+                     <div class="modal-footer">
+                         <form action="/user/disable" method="POST">
+                             <input type="hidden" value="<%= user.id %>" name="id">
+                             <button type="button" class="btn btn-secondary"
+                                 data-dismiss="modal">Não</button>
+                             <button type="submit" class="btn btn-danger">Sim</button>
+                         </form>
+
+                     </div>
+                  </div>
+              </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-md-9">
+        <div class="tab-content" id="v-pills-tabContent">
+          <!-- Perfil -->
+          <div class="tab-pane fade show active" id="v-pills-profile" role="tabpanel"
+            aria-labelledby="v-pills-profile-tab">
+
+            <div class="card">
+              <div class="card-header">
+                  <h3>
+                          Perfil
+                          <i class="fas fa-user-cog ml-1"></i>
+                  </h3>
+              </div>
+              <div class="card-body">
+
+            <form action="/user/edit/user" method="POST" id="formEditUser">
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label for="inputCompleteName">Nome completo</label>
+                  <input oninput="validate(this)" disabled value="<%= dataResult.completeName %>" type="text" class="form-control is-valid"
+                    id="inputCompleteName" placeholder="Nome completo" name="completeName" required>
+                </div>
+                <div class="form-group col-md-3">
+                  <label for="inputCpf">CPF</label>
+                  <input oninput="mascara(this);" oninput="validate(this)" disabled value="<%= dataResult.cpf %>" type="text" class="form-control is-valid" id="inputCpf"
+                    placeholder="CPF" name="cpf" required>
+                </div>
+                <div class="form-group col-md-3" id="birthAlternatedDiv">
+                  <label class="text-nowrap" for="inputDateBitrh">Data de Nascimento</label>
+                  <input oninput="validate(this)" disabled value="<%= dataResult.birthAlternated %>" type="text" class="form-control is-valid"
+                    id="inputDateBirthAlternated" placeholder="Data de Nascimento" minlength="10" maxlength="10"
+                    onkeypress="mascaraData(this)" name="birthAlternated" required>
+                </div>
+                <div class="form-group col-md-3" id="birthInputDiv" style="display: none;">
+                  <label class="text-nowrap" for="inputDateBitrh">Data de Nascimento</label>
+                  <input oninput="validate(this)" value="<%= dataResult.birthInput %>" type="date" class="form-control is-valid"
+                    id="inputDateBirth" placeholder="Data de Nascimento" name="birth" required>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-5">
+                  <label for="inputEmail">Email</label>
+                  <input oninput="validate(this)" disabled value="<%= dataResult.email %>" type="email" class="form-control is-valid" id="inputEmail"
+                    placeholder="Email" name="email" required>
+                </div>
+                <div class="form-group col-md-4">
+                  <label for="inputPassword">Senha</label>
+                  <input disabled type="password" class="form-control" id="inputPassword" placeholder="Senha" 
+                  name="password">
+                </div>
+                <div class="form-group col-md-3">
+                  <label class="text-nowrap" for="phoneNumber">Numero de telefone</label>
+                  <input oninput="validate(this)" disabled value="<%= dataResult.phoneNumber %>" type="text" class="form-control is-valid"
+                    id="phoneNumber" placeholder="Numero de telefone" name="phoneNumber" required>
+                </div>
+              </div>
+              <input type="hidden" value="<%= dataResult.id %>" name="id" >
+
+              <button type="button" class="btn btn-secondary" id="btnEditUser">Editar</button>
+              <button type="submit" class="btn btn-light" disabled id="btnSaveUser">Salvar</button>
+              <a class="btn btn-light disabled" href="/user/profile/<%= dataResult.id%>" id="btnCancelUser">Cancelar</a>
+            </form>
+            </div>
+          </div>
+        </div>
+          
+          <!-- Endereço -->
+          <div class="tab-pane fade" id="v-pills-address" role="tabpanel" aria-labelledby="v-pills-address-tab">
+            
+            <div class="card">
+              <div class="card-header">
+                  <h3>
+                          Endereço
+                          <i class="fas fa-map-marker-alt ml-1"></i>
+                  </h3>
+              </div>
+              <div class="card-body">
+
+            <form action="/user/edit/address" method="POST" id="formEditAddress">
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label for="inputAddress">Endereço</label>
+                  <input disabled value="<%= dataResult.address %>" oninput="validate(this)" type="text" class="form-control is-valid" id="inputAddress"
+                  name="address" required>
+                </div>
+                <div class="form-group col-md-4">
+                  <label for="inputComplement">Complemento</label>
+                  <input disabled value="<%= dataResult.complement %>" oninput="validate(this)" type="text" class="form-control is-valid" id="inputComplement"
+                  name="complement" required>
+                </div>
+                <div class="form-group col-md-2">
+                  <label  for="inputAddressNumber">Número</label>
+                  <input disabled value="<%= dataResult.addressNumber %>" oninput="validate(this)" type="text" class="form-control is-valid" id="inputAddressNumber"
+                  name="addressNumber" required>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="inputNeighborhood">Bairro</label>
+                <input disabled value="<%= dataResult.neighborhood %>" oninput="validate(this)" type="text" class="form-control is-valid" id="inputNeighborhood" placeholder="Apartamento, hotel, casa, etc."
+                name="neighborhood" required>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label for="inputCity">Cidade</label>
+                  <input disabled value="<%= dataResult.city %>" oninput="validate(this)" type="text" class="form-control is-valid" id="inputCity"
+                  name="city" required>
+                </div>
+                <div class="form-group col-md-4">
+                  <label for="inputState">Estado</label>
+                            <select disabled id="inputState" class="form-control" name="state">
+                                <% states.forEach(state=> { %>
+                                    <% if(dataResult.state==state.abbreviation){ %>
+                                        <option selected value="<%= state.abbreviation %>">
+                                            <%= state.name %>
+                                        </option>
+                                    <% }else{ %>
+                                        <option value="<%= state.abbreviation %>">
+                                            <%= state.name %>
+                                        </option>
+                                    <% } %>
+                                <% }) %>
+                            </select>
+                </div>
+                <div class="form-group col-md-2">
+                  <label for="inputCEP" class="text-nowrap">CEP <strong style="font-size: 0.7rem;" >(Somente números)</strong></label>
+                  <input disabled value="<%= dataResult.zipCode %>" oninput="validate(this)" type="text"
+                  class="form-control is-valid" id="inputCEP" minlength="8" maxlength="8" required
+                  name="zipCode">
+                </div>
+              </div>
+              <input type="hidden" value="<%= dataResult.id %>" name="id">
+              <button type="button" class="btn btn-secondary" id="btnEditAddress">Editar</button>
+              <button type="submit" class="btn btn-light" disabled id="btnSaveAddress">Salvar</button>
+              <a class="btn btn-light disabled" href="/user/profile/<%= dataResult.id%>" id="btnCancelAddress">Cancelar</a>
+            </form>
+          </div>
+          </div>
+          </div>
+<!-- Minhas Compras -->
+          <div class="tab-pane fade" id="v-pills-mycart" role="tabpanel" aria-labelledby="v-pills-mycart-tab">
+            <div class="card">
+              <div class="card-header">
+                  <h3>
+                          Minhas Compras
+                          <i class="fas fa-cart-arrow-down ml-1"></i>
+                  </h3>
+              </div>
+              <div class="card-body">
+                  <table class="table table-hover table-responsive-sm">
+                      <thead class="thead-dark">
+                          <tr>
+                              <th scope="col">Data</th>
+                              <th scope="col">Total</th>
+                              <th class="text-center" scope="col">Status</th>
+                              <th scope="col">Visualizar</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                          <% orders.forEach(order=> { %>
+                              <tr>
+                                  <th scope="row">
+                                      <%= order.convertDate %>
+                                  </th>
+                                  <td>R$ <%= order.amount.replace('.', ',') %>
+                                  </td>
+                                  <td class="d-flex justify-content-center">
+                                      <% if (order.status==1) { %>
+                                          <a class="btn font-weight-bold px-1 py-1">
+                                              Pago
+                                              <i class="fas fa-hand-holding-usd ml-1"></i>
+                                          </a>
+                                          <% } else if (order.status == 2) { %>
+                                              <a class="btn font-weight-bold  px-1 py-1 text-center">
+                                                  Separando Mercadoria para Envio
+                                                  <i class="fas fa-undo-alt ml-1 "></i></i>
+                                              </a>
+                                              <% } else { %>
+                                                  <a class="btn font-weight-bold  px-1 py-1 text-center">
+                                                      Enviado
+                                                      <i class="fas fa-truck ml-1"></i>
+                                                  </a>
+                                                  <% } %>
+                                  </td>
+                                  <td style="width: 13rem;">
+                                      <a class="btn btn-sm btn-secondary" href="/user/myorders/view/<%= order.id %>" >Vizualizar Compra</a>
+                                  </td>
+                              </tr>
+                              <% }) %>
+  
+                      </tbody>
+                  </table>
+              </div>
+          </div>
+         
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let btnEditUser = document.getElementById('btnEditUser');
+    let btnSaveUser = document.getElementById('btnSaveUser');
+    let btnCancelUser = document.getElementById('btnCancelUser');
+
+    btnEditUser.addEventListener('click', () => {
+      btnEditUser.disabled = true;
+      btnSaveUser.disabled = false;
+
+      document.getElementById('birthInputDiv').style = 'display: block;';
+      document.getElementById('birthAlternatedDiv').style = 'display: none;';
+      
+      btnCancelUser.className = 'btn btn-light';
+      let all = document.querySelector('#formEditUser').getElementsByTagName('input');
+      for (let i = 0; i < all.length; i++) {
+        all.item(i).disabled = false;
+      }
+      
+    });
+
+
+    let btnEditAddress = document.getElementById('btnEditAddress');
+    let btnSaveAddress = document.getElementById('btnSaveAddress');
+    let btnCancelAddress = document.getElementById('btnCancelAddress');
+
+    btnEditAddress.addEventListener('click', () => {
+      btnEditAddress.disabled = true;
+      btnSaveAddress.disabled = false;
+
+      btnCancelAddress.className = 'btn btn-light';
+      let select = document.querySelector('#formEditAddress').getElementsByTagName('select');
+      select.item(0).disabled = false;
+      let all = document.querySelector('#formEditAddress').getElementsByTagName('input');
+      for (let i = 0; i < all.length; i++) {
+        all.item(i).disabled = false;
+      }
+    });
+
+    let search = document.getElementById('search-bar');
+    let lastSearch = search.value;
+    let TIMEID = setInterval(() => {
+      if (search.value != '') {
+        if (lastSearch == search.value){
+          let form = document.getElementById('search-form');
+          form.submit();
+        }
+      }
+      lastSearch = search.value;
+    }, 500);
+
+  </script>
+
+<script>
+  let todayDate = new Date();
+  let day = (todayDate.getDate()).toString();
+  let month = (todayDate.getMonth() + 1).toString();
+  if(day.length == 1){
+      day = `0${day}`;
+  }
+  if(month.length == 1){
+      month = `0${month}`;
+  }
+  let year = todayDate.getFullYear();
+  document.getElementById('inputDateBirth').max = `${year}-${month}-${day}`;
+</script>
+  
+
+  <script src="/scripts/cpfmask.js"></script> 
+  <script src="/scripts/validate.js"></script>
+  <script src="/scripts/data.mask.js"></script>
+  <%- include('../partials/footer.ejs'); %>

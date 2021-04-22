@@ -1,0 +1,91 @@
+<%- include('../partials/header.ejs');%>
+<%- include(navbar); %>
+<div class="background-product" style="min-height: 100vh;">
+    <div class="container background-product-front">
+        <div class="row p-2">
+            <div class="col-lg-1 col-2 miniatura" style="padding: 0%;">
+                
+                <div style="width: 100%; height: 4rem;" class="border rounded">
+                    <img class="card-img-top mx-auto d-block" style="max-width:100%;
+                    max-height: 4rem;
+                    width: auto;
+                    height: auto;" src="<%= product.imageLink %>" onmousemove="renderImageSmall(this);">
+                </div>
+                <% product.Product_Images.forEach(image => { %>
+                    <div style="width: 100%; height: 4rem;" class="border rounded">
+                        <img class="card-img-top mx-auto d-block" style="max-width:100%;
+                        max-height: 4rem;
+                        width: auto;
+                        height: auto;" src="<%= image.imageLink %>" onmousemove="renderImageSmall(this);">
+                    </div>
+                <% }) %> 
+
+                <!-- <img src="<%= product.imageLink %>" alt="" class="w-100" style="border: 1px solid grey;" onmousemove="renderImageSmall(this);">
+                <% product.Product_Images.forEach(image => { %>
+                    <img src="<%= image.imageLink %>" alt="" class="w-100" style="border: 1px solid grey;" onmousemove="renderImageSmall(this);">     
+                <% }) %> -->
+            
+            </div>
+            <div class="col-lg-6 col-10 d-flex align-items-center" style="height: 320px">
+                <img src="<%= product.imageLink %>" id="bigImage" alt="" class="img-fluid rounded mx-auto d-block" style="max-height: 320px;">
+            </div>
+            <div class="col-lg-5" style="border: 1px solid grey; border-radius: 2%;">
+                <div class="mx-3 mb-2 little-description">
+                    <div>
+                        <h2><%= product.namePlusSmallDescription %></h2>
+                        <h6><%= product.brand %></h6>
+                    </div>
+                    <h4>R$ <%= product.saleValue.replace('.', ',') %></h4>
+                    <h6>cod. ref <strong><%= product.refCode%></strong></h6>
+
+                    <form action="/add-to-cart" method="POST">
+                        
+                       
+                        <% if (product.stockQuantity <= 0) { %>
+                            <h6 class="d-flex" style="color: red; align-items: center;"><strong>Indisponível*</strong></h6>
+                            <button disabled type="submit" class="btn btn-primary"><i class="fas fa-cart-plus mr-2"></i>Adicionar ao carrinho</button>
+                        <% } else { %>
+                            <h6 class="d-flex" style="color: blue; align-items: center;">Quantidade: 
+                                <input class="ml-2 form-control mr-2" style="width: 18%;" type="number" value="1" min="1" max="<%= product.stockQuantity %>" name="quantity" required>
+                                <span style="font-size: small;">(<strong><%= product.stockQuantity %></strong> disponível)</span>
+                            </h6>
+                            <button type="submit" class="btn btn-primary"><i class="fas fa-cart-plus mr-2"></i>Adicionar ao carrinho</button>
+                        <% } %>
+                        <input type="hidden" value="<%= product.id%>" name="id">
+                    </form>
+                   
+                </div>
+            </div>
+        </div>
+        <div class="row m-5">
+            <div>
+                <h4>Descrição</h4>
+                    <%- product.description %>
+            </div>
+        </div>
+    </div>
+
+    <%- include('../partials/footer.ejs');%>
+</div>
+    <script>
+        function renderImageSmall(tag){
+           let linkImage = tag.src;
+           document.getElementById('bigImage').src = linkImage;
+        }
+    </script>
+
+<script>
+
+    let search = document.getElementById('search-bar');
+    let lastSearch = search.value;
+    let TIMEID = setInterval(() => {
+      if (search.value != '') {
+        if (lastSearch == search.value){
+          let form = document.getElementById('search-form');
+          form.submit();
+        }
+      }
+      lastSearch = search.value;
+    }, 500);
+  
+  </script>

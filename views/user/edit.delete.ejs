@@ -1,0 +1,124 @@
+<%- include('../partials/header.ejs'); %>
+
+    <div class="container mt-1">
+        <% if(error){ %>
+            
+            <%- '<div class="alert alert-danger alert-dismissible fade show" role="alert">' %> 
+            <%- '<strong> ' %>
+            <%= error %>
+            <%- '</strong>' %> 
+            <%- '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' %> 
+            <%- '<span aria-hidden="true">&times;</span>' %> 
+            <%- '</button>' %>
+            <%- '</div>' %>  
+        
+          
+        <% } %>
+        <div class="card">
+            <div class="card-header">
+                <h3>Editar Usuario</h3>
+            </div>
+            <div class="card-body">
+                <form action="/user/edit" method="POST" class="container p-2">
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="inputFullName">Nome Completo</label>
+                            <input value="<%= dataResult.completeName %>" oninput="validate(this)" type="text"
+                                class="form-control is-invalid" id="inputFullName" placeholder="Ex: João Santos"
+                                required name="completeName">
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label for="inputDateBirth">Data de Nascimento</label>
+                            <input value="<%= dataResult.birthAlternated %>" oninput="validate(this)" type="text"
+                                class="form-control is-invalid" name="birth" id="inputDateBirth" minlength="10"
+                                maxlength="10" onkeypress="mascaraData(this)" />
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="inputIdentification">CPF <strong>(Somente números)</strong></label>
+                            <input oninput="mascara(this);" value="<%= dataResult.cpf %>"  oninput="validate(this)" type="text"
+                                class="form-control is-invalid" id="inputIdentification" placeholder="" required
+                                name="cpf">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-3">
+                            <label for="inputPhone">Telefone</label>
+                            <input value="<%= dataResult.phoneNumber %>" oninput="validate(this)" type="text"
+                                class="form-control is-invalid" id="inputPhone" placeholder="44999897421" required
+                                name="phoneNumber">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="inputEmail">Email</label>
+                            <input value="<%= dataResult.email %>" oninput="validate(this)" type="email"
+                                class="form-control is-invalid" id="inputEmail" placeholder="Email" required
+                                name="email">
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="inputPassword">Senha</label>
+                            <input oninput="validate(this)" type="password" class="form-control is-invalid"
+                                id="inputPassword" placeholder="Senha" name="password">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-3">
+                            <label for="inputCEP">CEP <strong>(Somente números)</strong></label>
+                            <input value="<%= dataResult.zipCode %>" oninput="validate(this)" type="text"
+                                class="form-control is-invalid" id="inputCEP" minlength="8" maxlength="8" required
+                                name="zipCode">
+                        </div>
+                        <div class="form-group col-md-5">
+                            <label for="inputAddress">Endereço</label>
+                            <input value="<%= dataResult.address %>" oninput="validate(this)" type="text"
+                                class="form-control is-invalid" id="inputAddress" placeholder="Rua dos Bobos" required
+                                name="address">
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="inputNeighborhood">Bairro</label>
+                            <input value="<%= dataResult.neighborhood %>" oninput="validate(this)" type="text"
+                                class="form-control is-invalid" id="inputNeighborhood"
+                                placeholder="Ex: Jardim Petrópolis" required name="neighborhood">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label for="inputCity">Cidade</label>
+                            <input value="<%= dataResult.city %>" oninput="validate(this)" type="text"
+                                class="form-control is-invalid" id="inputCity" required name="city">
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="inputState">Estado</label>
+                            <select id="inputState" class="form-control" name="state">
+                                <% states.forEach(state=> { %>
+                                    <% if(dataResult.state==state.abbreviation){ %>
+                                        <option selected value="<%= state.abbreviation %>">
+                                            <%= state.name %>
+                                        </option>
+                                        <% }else{ %>
+                                            <option value="<%= state.abbreviation %>">
+                                                <%= state.name %>
+                                            </option>
+                                            <% } %>
+                                                <% }) %>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label for="inputComplement">Complemento</label>
+                            <input value="<%= dataResult.complement %>" oninput="validate(this)" type="text"
+                                class="form-control is-invalid" id="inputComplement"
+                                placeholder="Ex: casa, apartamento..." required name="complement">
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label for="inputNumber">Número</label>
+                            <input value="<%= dataResult.addressNumber %>" oninput="validate(this)" type="text"
+                                class="form-control is-invalid" id="inputNumber" placeholder="Ex: 2211, A21..." required
+                                name="addressNumber">
+                        </div>
+                    </div>
+                    <input type="hidden" value="<%= dataResult.id %>" name="id">
+                    <button type="submit" class="btn btn-success">Alterar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script src="/scripts/cpfmask.js"></script>
+    <%- include('../partials/footer.ejs'); %>

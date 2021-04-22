@@ -1,0 +1,168 @@
+<%- include('../partials/header.ejs');%>
+<%- include('../partials/navbarAdmin.ejs');%>
+
+
+
+    <div class="container mt-1 mb-1" style="min-height: 98vh;">
+
+        <% if(message){ %>
+        
+            <%- '<div class="alert alert-success alert-dismissible fade show" role="alert">' %> 
+            <%- '<strong> ' %>
+            <%= message %>
+            <%- '</strong>' %> 
+            <%- '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' %> 
+            <%- '<span aria-hidden="true">&times;</span>' %> 
+            <%- '</button>' %>
+            <%- '</div>' %>  
+           
+        <% } %>
+
+        <% if(error){ %>
+                
+            <%- '<div class="alert alert-danger alert-dismissible fade show" role="alert">' %> 
+            <%- '<strong> ' %>
+            <%= error %>
+            <%- '</strong>' %> 
+            <%- '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' %> 
+            <%- '<span aria-hidden="true">&times;</span>' %> 
+            <%- '</button>' %>
+            <%- '</div>' %>  
+        
+          
+        <% } %>
+    
+
+        <div class="card">
+            <div class="card-header d-flex justify-content-between">
+                <h3>Fornecedores</h3>
+                <a href="/admin/provider/create" class="btn btn-primary">Novo Fornecedor</a>
+            </div>
+            <div class="card-body">
+                <table class="table table-bordered table-hover">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">Nome Fantasia</th>
+                            <th scope="col">CNPJ/CPF</th>
+                            <th scope="col">Opções</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% data.forEach(provider => { %>
+                            <% if (provider.status == 0) { %>
+                                <tr class="table-secondary text-secondary">
+                            <% } else { %>
+                                <tr>    
+                            <% } %>
+                                <th scope="row">
+                                    <%= provider.id %>
+                                </th>
+                                <td>
+                                    <%= provider.fantasyName %>
+                                </td>
+                                <td>
+                                    <%= provider.cnpj_cpf %>
+                                </td>
+                                <td class="d-flex justify-content-end">
+                                    <a href="/admin/provider/more/<%= provider.id %> " class="btn btn-primary btn-sm mr-1">Mais</a>
+                                    <a href="/admin/provider/edit/<%= provider.id %> " class="btn btn-warning btn-sm mr-1">Editar</a>
+                                    
+                                    <!-- modal Button -->
+                                    <% if (provider.status == 1) { %>
+                                        <button type="button" class="btn btn-dark btn-sm mr-1" data-toggle="modal"
+                                        data-target="#modalDesativar<%= provider.id %> ">
+                                        Desativar
+                                        </button>
+                                    <% } else { %>
+                                        <button type="button" class="btn btn-info btn-sm mr-1" data-toggle="modal"
+                                        data-target="#modalDesativar<%= provider.id %> ">
+                                        Ativar
+                                        </button>
+                                    <% } %>
+                                   
+                                    
+
+                                    <!-- modal -->
+                                    <div class="modal fade" id="modalDesativar<%= provider.id %>" tabindex="-1" role="dialog"
+                                        aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel">Alerta do Sistema
+                                                    </h5>
+                                                    <button type="button" class="close" data-dismiss="modal"
+                                                        aria-label="Fechar">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <% if (provider.status == 1) { %>
+                                                    <div class="modal-body">
+                                                        Deseja Desativar este Item?
+                                                    </div>
+                                                <% } else { %>
+                                                    <div class="modal-body">
+                                                        Deseja Ativar este Item?
+                                                    </div>
+                                                <% } %>
+                                                
+                                                <div class="modal-footer">
+                                                    <form action="/admin/provider/status" method="POST">
+                                                        <input type="hidden" value="<%= provider.id %>" name="id">
+                                                        <button type="button" class="btn btn-secondary"
+                                                            data-dismiss="modal">Não</button>
+                                                        <button type="submit" class="btn btn-danger">Sim</button>
+                                                    </form>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- modal Button -->
+                                    <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
+                                        data-target="#modalExemplo<%= provider.id %> ">
+                                        Deletar
+                                    </button>
+
+
+
+
+                                    <!-- modal -->
+                                    <div class="modal fade" id="modalExemplo<%= provider.id %>" tabindex="-1" role="dialog"
+                                        aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel">Alerta do Sistema
+                                                    </h5>
+                                                    <button type="button" class="close" data-dismiss="modal"
+                                                        aria-label="Fechar">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    Deseja Excluir este Item?
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <form action="/admin/provider/delete" method="POST">
+                                                        <input type="hidden" value="<%= provider.id %>" name="id">
+                                                        <button type="button" class="btn btn-secondary"
+                                                            data-dismiss="modal">Não</button>
+                                                        <button type="submit" class="btn btn-danger">Sim</button>
+                                                    </form>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </td>
+                            </tr>
+                            <% }) %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <%- include('../partials/footer.ejs');%>

@@ -1,0 +1,162 @@
+<%- include('../partials/header.ejs');%>
+<%- include('../partials/navbarAdmin.ejs'); %>
+
+
+    <div class="container mt-1 mb-1" style="height: 98vh;">
+        
+        <% if(message){ %>
+        
+            <%- '<div class="alert alert-success alert-dismissible fade show" role="alert">' %> 
+            <%- '<strong> ' %>
+            <%= message %>
+            <%- '</strong>' %> 
+            <%- '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' %> 
+            <%- '<span aria-hidden="true">&times;</span>' %> 
+            <%- '</button>' %>
+            <%- '</div>' %>  
+        
+          
+        <% } %>
+        
+        <% if(error){ %>
+                
+            <%- '<div class="alert alert-danger alert-dismissible fade show" role="alert">' %> 
+            <%- '<strong> ' %>
+            <%= error %>
+            <%- '</strong>' %> 
+            <%- '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' %> 
+            <%- '<span aria-hidden="true">&times;</span>' %> 
+            <%- '</button>' %>
+            <%- '</div>' %>  
+        
+          
+        <% } %>
+
+        <div class="card">
+            <div class="card-header d-flex justify-content-between">
+                <h3>Administradores do Sistema</h3>
+                <a href="/admin/create" class="btn btn-primary">Novo Administrador</a>
+            </div>
+            <div class="card-body">
+                <table class="table table-bordered table-hover">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">Nome</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Opções</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% data.forEach(admin=> { %>
+                            <% if (admin.status == 0) { %>
+                                <tr class="table-secondary text-secondary">
+                            <% } else { %>
+                                <tr>
+                            <% } %>
+                            
+                                <th scope="row">
+                                    <%= admin.id %>
+                                </th>
+                                <td>
+                                    <%= admin.name %>
+                                </td>
+                                <td>
+                                    <%= admin.email %>
+                                </td>
+                                <td class="d-flex justify-content-end">
+                                    <a href="/admin/edit/<%= admin.id %>" class="btn btn-warning btn-sm mr-1">Editar</a>
+                                    <% if (admin.status == 1) { %>
+                                        <!-- modal Button -->
+                                        <button type="button" class="btn btn-dark btn-sm mr-1" data-toggle="modal"
+                                            data-target="#modalExemploStatus<%= admin.id %> ">
+                                            Desativar
+                                        </button>
+                                    <% } else { %>
+                                    <!-- modal Button -->
+                                        <button type="button" class="btn btn-info btn-sm mr-1" data-toggle="modal"
+                                            data-target="#modalExemploStatus<%= admin.id %> ">
+                                            Ativar
+                                        </button>
+                                    <% } %>
+                                    <!-- modal -->
+                                    <div class="modal fade" id="modalExemploStatus<%= admin.id %>" tabindex="-1" role="dialog"
+                                        aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel">Alerta do Sistema
+                                                    </h5>
+                                                    <button type="button" class="close" data-dismiss="modal"
+                                                        aria-label="Fechar">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <% if (admin.status == 1) { %>
+                                                    <div class="modal-body">
+                                                        Deseja Desativar este Administrador?
+                                                    </div>
+                                                <% } else { %>
+                                                    <div class="modal-body">
+                                                        Deseja Ativar este Administrador?
+                                                    </div>
+                                                <% } %>
+                                                
+                                                <div class="modal-footer">
+                                                    <form action="/admin/status" method="POST">
+                                                        <input type="hidden" value="<%= admin.id %>" name="id">
+                                                        <button type="button" class="btn btn-secondary"
+                                                            data-dismiss="modal">Não</button>
+                                                        <button type="submit" class="btn btn-danger">Sim</button>
+                                                    </form>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- modal Button -->
+                                    <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
+                                        data-target="#modalExemplo<%= admin.id %> ">
+                                        Deletar
+                                    </button>
+
+
+                                    <!-- modal -->
+                                    <div class="modal fade" id="modalExemplo<%= admin.id %>" tabindex="-1" role="dialog"
+                                        aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel">Alerta do Sistema
+                                                    </h5>
+                                                    <button type="button" class="close" data-dismiss="modal"
+                                                        aria-label="Fechar">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    Deseja Excluir este Item?
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <form action="/admin/delete" method="POST">
+                                                        <input type="hidden" value="<%= admin.id %>" name="id">
+                                                        <button type="button" class="btn btn-secondary"
+                                                            data-dismiss="modal">Não</button>
+                                                        <button type="submit" class="btn btn-danger">Sim</button>
+                                                    </form>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </td>
+                            </tr>
+                            <% }) %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <%- include('../partials/footer.ejs');%>
