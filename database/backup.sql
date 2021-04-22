@@ -311,7 +311,7 @@ CREATE TABLE `Users` (
 
 LOCK TABLES `Users` WRITE;
 /*!40000 ALTER TABLE `Users` DISABLE KEYS */;
-INSERT INTO `Users` VALUES (1,'Jose Santos Silva','2002-05-02 01:00:00','034.543.883-33','jose@jose.com','$2b$10$36o90T1NkFghXvrHeb3xb.A0mOkyNsXp9Zl2ERG1VG1nIJycYIDZu','44985621278','Umuarama','PR','Rua dos Comerciantes','2245','Jd. Primeiro de Maio','Casa','87504387',1,'2021-04-08 07:41:53','2021-04-08 07:41:53'),(2,'flavio fedechen aguiar','2000-10-30 00:00:00','730.827.463-22','flavio@flavio.com','$2b$10$X1jtJVkN51v4IpYO35ZDwOiorWonRVNUDWJbEynyFGHTRsCKttdva','44984568502','Umuarama','PR','Rua das Flores','3256','Jd. Petropolis','Casa','87506190',1,'2021-04-08 09:24:48','2021-04-08 09:48:03');
+INSERT INTO `Users` VALUES (1,'Jose Santos Silva','2002-05-02 01:00:00','034.543.883-33','jose@jose.com','$2b$10$36o90T1NkFghXvrHeb3xb.A0mOkyNsXp9Zl2ERG1VG1nIJycYIDZu','44985621278','Umuarama','PR','Rua dos Comerciantes','2245','Jd. Primeiro de Maio','Casa','87504387',1,'2021-04-08 07:41:53','2021-04-08 07:41:53'),(2,'flavio pereira junior','2000-10-10 00:00:00','730.827.463-22','flavio@flavio.com','$2b$10$X1jtJVkN51v4IpYO35ZDwOiorWonRVNUDWJbEynyFGHTRsCKttdva','44984568502','Umuarama','PR','Rua das Flores','3256','Jd. Petropolis','Casa','87506190',1,'2021-04-08 09:24:48','2021-04-08 09:48:03');
 /*!40000 ALTER TABLE `Users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
